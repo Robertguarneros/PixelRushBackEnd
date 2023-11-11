@@ -1,6 +1,6 @@
 package edu.upc.dsa.models;
 
-public class Store {
+public class StoreObject {
     String objectID;
     String articleName;
     int price;
@@ -8,11 +8,11 @@ public class Store {
     String articlePhoto; //same as attribute photo from User class
 
     //empty constructor
-    public Store(){}
+    public StoreObject(){}
 
     //fully constructor
-    public Store(String objectID, String articleName, int price,
-                 String description, String articlePhoto) {
+    public StoreObject(String objectID, String articleName, int price,
+                       String description, String articlePhoto) {
         this.objectID = objectID;
         this.articleName = articleName;
         this.price = price;

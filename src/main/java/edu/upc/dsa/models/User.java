@@ -1,5 +1,8 @@
 package edu.upc.dsa.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     String username;
     String password;
@@ -11,6 +14,11 @@ public class User {
     int age;
     //empty constructor
     int allPoints; //We need an attribute points to buy!!!!!
+    //Played Matches list
+    List<Match> matchesPlayed;
+    //list of owned objects;
+    List<StoreObject> ownedObjects;
+
     public User(){}
     // fully constructor
     public User(String username, String password, String mail, String name,
@@ -23,6 +31,8 @@ public class User {
         this.photo = photo;
         this.state = state;
         this.age = age;
+        this.matchesPlayed = new ArrayList<>();//create empty lists of matches
+        this.ownedObjects = new ArrayList<>();//create empty list of owned objects
     }
     //all getters and setters from attributes of User class
     public String getUsername() {
@@ -88,4 +98,24 @@ public class User {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public List<Match> getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public void setMatchesPlayed(List<Match> matchesPlayed) {
+        this.matchesPlayed = matchesPlayed;
+    }
+
+    public List<StoreObject> getOwnedObjects() {
+        return ownedObjects;
+    }
+
+    public void setOwnedObjects(List<StoreObject> ownedObjects) {
+        this.ownedObjects = ownedObjects;
+    }
+
+    // Methods of our class
+    public void addNewFinishedMatch(Match m){ this.matchesPlayed.add(m);}//function to add a new match to the played matches list
+
 }

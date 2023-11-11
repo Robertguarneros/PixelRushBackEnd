@@ -1,8 +1,8 @@
 package edu.upc.dsa.models;
 
-public class InfoLVLs {
+public class InfoLVLs {// I think this is not necessary here, this will be useful in Unity, but not sure. Need to discuss it
     int ID; //number of the level
-    String LVLname;
+    String levelName;
     float speed;
     float doubleJump;
     float gravity;
