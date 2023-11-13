@@ -90,4 +90,12 @@ public class Match {
     public void endMatchNow(){//method used to end the match without finishing the level. Points are not saved.
         this.isInMatch=false;
     }
+
+    public int SumAllPoints(){
+        int res =0;
+        for (int n : pointsObtainedPerLevel){
+            res += n;
+        }
+        return res;
+    }
 }

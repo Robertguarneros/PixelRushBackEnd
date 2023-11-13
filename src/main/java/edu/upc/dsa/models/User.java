@@ -22,14 +22,14 @@ public class User {
     public User(){}
     // fully constructor
     public User(String username, String password, String mail, String name,
-                String surname, String photo, String state, int age) {
+                String surname, int age) {
         this.username = username;
         this.password = password;
         this.mail = mail;
         this.name = name;
         this.surname = surname;
-        this.photo = photo;
-        this.state = state;
+        this.photo = null; //user will put a photo after the register
+        this.state = null; //same as ptoto
         this.age = age;
         this.matchesPlayed = new ArrayList<>();//create empty lists of matches
         this.ownedObjects = new ArrayList<>();//create empty list of owned objects
@@ -117,5 +117,16 @@ public class User {
 
     // Methods of our class
     public void addNewFinishedMatch(Match m){ this.matchesPlayed.add(m);}//function to add a new match to the played matches list
-
+    public void addObeject(StoreObject newObject){
+        if (newObject == null){
+            ownedObjects = new ArrayList<>();
+        }
+        ownedObjects.add(newObject);
+    }
+    public int getNumOfMatches(){
+        if(matchesPlayed !=null){
+            return matchesPlayed.size();
+        }
+        else return 0;
+    }
 }
