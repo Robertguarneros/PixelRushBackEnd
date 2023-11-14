@@ -2,6 +2,7 @@ package edu.upc.dsa.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class User {
     String username;
@@ -12,8 +13,11 @@ public class User {
     String photo; //.png or .jpg <img src="photo.jpg"> (Front-end job)
     String state;
     int age;
+
+
+
     //empty constructor
-    int allPoints; //We need an attribute points to buy!!!!!
+    int pointsEarned; //We need an attribute points to buy!!!!!
     //Played Matches list
     List<Match> matchesPlayed;
     //list of owned objects;
@@ -29,10 +33,11 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.photo = null; //user will put a photo after the register
-        this.state = null; //same as ptoto
+        this.state = null; //same as photo
         this.age = age;
         this.matchesPlayed = new ArrayList<>();//create empty lists of matches
         this.ownedObjects = new ArrayList<>();//create empty list of owned objects
+        this.pointsEarned = 0;//User starts with 0 points earned
     }
     //all getters and setters from attributes of User class
     public String getUsername() {
@@ -114,14 +119,32 @@ public class User {
     public void setOwnedObjects(List<StoreObject> ownedObjects) {
         this.ownedObjects = ownedObjects;
     }
+    public int getPointsEarned() {
+        return pointsEarned;
+    }
+
+    public void setPointsEarned() {
+        int sumOfPointsEarned=0;
+        for(Match m:matchesPlayed){
+            sumOfPointsEarned = sumOfPointsEarned+m.getTotalPoints();
+        }
+
+        this.pointsEarned = sumOfPointsEarned;
+    }
 
     // Methods of our class
     public void addNewFinishedMatch(Match m){ this.matchesPlayed.add(m);}//function to add a new match to the played matches list
-    public void addObeject(StoreObject newObject){
+    public int addNewOwnedObject(StoreObject newObject){
         if (newObject == null){
             ownedObjects = new ArrayList<>();
         }
-        ownedObjects.add(newObject);
+
+        if(pointsEarned> newObject.getPrice()){
+            ownedObjects.add(newObject);
+            return 1;
+        }else{
+            return -1;
+        }
     }
     public int getNumOfMatches(){
         if(matchesPlayed !=null){

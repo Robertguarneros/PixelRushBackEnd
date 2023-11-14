@@ -91,11 +91,4 @@ public class Match {
         this.isInMatch=false;
     }
 
-    public int SumAllPoints(){
-        int res =0;
-        for (int n : pointsObtainedPerLevel){
-            res += n;
-        }
-        return res;
-    }
 }

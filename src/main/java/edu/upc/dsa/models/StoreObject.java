@@ -12,12 +12,12 @@ public class StoreObject {
 
     //fully constructor
     public StoreObject(String objectID, String articleName, int price,
-                       String description, String articlePhoto) {
+                       String description) {
         this.objectID = objectID;
         this.articleName = articleName;
         this.price = price;
         this.description = description;
-        this.articlePhoto = articlePhoto;
+        this.articlePhoto = null;
     }
 
     //all getters and setters from Store class
