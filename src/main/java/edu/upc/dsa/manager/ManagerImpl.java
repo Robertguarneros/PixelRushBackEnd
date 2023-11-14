@@ -1,23 +1,20 @@
-package edu.upc.dsa;
+package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.UsernameDoesNotExistException;
 import edu.upc.dsa.exceptions.UsernameIsInMatchException;
 import edu.upc.dsa.exceptions.UsernameisNotInMatchException;
-import edu.upc.dsa.models.Track;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.Match;
 import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
-import org.reflections.Store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
-    HashMap<String,User> users; //Key = username
+    HashMap<String,User> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
     HashMap<String,Match> matches; // Key = username
 
@@ -30,7 +27,7 @@ public class ManagerImpl implements Manager{
         return instance;
     }
 
-    private ManagerImpl(){
+    public ManagerImpl(){
         this.users = new HashMap<>();
         this.storeObjects = new HashMap<>();
         this.matches = new HashMap<>();
@@ -71,23 +68,25 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void Register(String username, String password, String name, String surname, String mail, int age) {
+    public void register(String username, String password, String name, String surname, String mail, int age) {
         logger.info("Create user with ID= "+username);
         if(!users.containsKey(username)){
             User newUser = new User(username, password,mail,name,surname,age);
             users.put(username, newUser); //add new user
             logger.info("User successfully created");
         }
-        else logger.warn("this username already exit");
+        else logger.warn("this username already exists");
     }
 
     @Override
-    public void Login(String username, String password) {
+    public boolean login(String username, String password) {
         User user = users.get(username);
         if (user != null && user.getPassword().equals(password)){
             logger.info("Welcome User:"+username);
+            return true;
         }
-        else{logger.warn("Username or Password was incorrect");}
+        else{logger.warn("Username or Password was incorrect");
+        return false;}
     }
 
     @Override
@@ -185,6 +184,17 @@ public class ManagerImpl implements Manager{
             users.get(username).addNewFinishedMatch(m);
             logger.info("User has ended match");
         }
+    }
+
+    @Override
+    public void addObjectToStore(String objectID, String articleName, int price, String description){
+        logger.info("Create object with ID= "+objectID);
+        if(!storeObjects.containsKey(objectID)){
+            StoreObject newObject = new StoreObject(objectID,articleName,price,description);
+            storeObjects.put(objectID,newObject);
+            logger.info("Object successfully created");
+        }
+        else logger.warn("this object already exists");
     }
 
 }
