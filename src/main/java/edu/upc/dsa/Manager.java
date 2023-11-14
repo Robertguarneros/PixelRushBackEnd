@@ -21,8 +21,6 @@ public interface Manager {
     public int getMatchTotalPoints(String username);
     public void NextLevel(String username, int points);
     public void EndMatch(String username);
-
-
-
-
+    public int sizeUser();
+    public int sizeStore();
 }

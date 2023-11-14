@@ -1,5 +1,6 @@
 package edu.upc.dsa;
 
+import edu.upc.dsa.models.Track;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.Match;
 import edu.upc.dsa.models.StoreObject;
@@ -21,7 +22,7 @@ public class ManagerImpl implements Manager{
     private static Manager instance;
     final static Logger logger = Logger.getLogger(ManagerImpl.class);
 
-    private static Manager getInstance(){
+    public static Manager getInstance(){
         if(instance==null) instance = new ManagerImpl();
         return instance;
     }
@@ -31,6 +32,19 @@ public class ManagerImpl implements Manager{
         this.storeObjects = new HashMap<>();
         this.matches = new HashMap<>();
     }
+    public int sizeUser() {
+        int ret = this.users.size();
+        logger.info("size " + ret);
+
+        return ret;
+    }
+    public int sizeStore() {
+        int ret = this.storeObjects.size();
+        logger.info("size " + ret);
+
+        return ret;
+    }
+
     @Override
     public int numberOfUsers(){
         return this.users.size();
