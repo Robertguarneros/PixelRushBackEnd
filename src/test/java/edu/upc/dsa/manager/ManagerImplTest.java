@@ -31,7 +31,7 @@ public class ManagerImplTest {
     public void testNumberOfUsers() {//test to verify that we only have 4 store items as previously created in the beforeEach.
         Assert.assertEquals(4,this.m.numberOfUsers());
     }
-    @Test
+    @Test//we could add excpetion user does not exist
     public void testGetUser() {//Tests to try getting the info of a user.
         Assert.assertEquals("robertoguarneros11",this.m.getUser("robertoguarneros11").getUsername());
         Assert.assertEquals("Roberto",this.m.getUser("robertoguarneros11").getName());
@@ -74,30 +74,38 @@ public class ManagerImplTest {
         Assert.assertTrue(this.m.login("robertoguarneros11","123"));
         Assert.assertFalse(this.m.login("robertoguarneros11","12sdaf3"));
     }
-    @Test
-    public void testAddItemToUser() {
+    @Test//we need to test all tests from this point, previous ones have been checked we could add exception user does not exist, and even item does not exist
+    public void testAddItemToUser() {//test to verify if we can add items to a user list.
+        this.m.addItemToUser("robertoguarneros11","123");
+        Assert.assertEquals(1,this.m.getUser("robertoguarneros11").getOwnedObjects().size());
+        this.m.addItemToUser("robertoguarneros11","222");
+        Assert.assertEquals(2,this.m.getUser("robertoguarneros11").getOwnedObjects().size());
+        Assert.assertEquals("Poción",this.m.getUser("robertoguarneros11").getOwnedObjects().get(0).get.getArticleName());//mirar si funciona
+        Assert.assertEquals("skin",this.m.getUser("robertoguarneros11").getOwnedObjects().get(1).get.getArticleName());
     }
     @Test
-    public void testCreateMatch() {
+    public void testCreateMatch() throws UsernameDoesNotExistException, UsernameIsInMatchException{//test to create a new match, we need to implement a getMatch in the ManagerImpl in order to be able to first see if the user has a current match or not.
+        Assert.assertEquals(false, this.m.getMatch("robertoguarneros11").isInMatch());//can it be possible that having the boolean isInMatch is redundant?? If a match exists for a username, it is because the user is in a match so the boolean is redundant?
+        
     }
     @Test
-    public void testGetLevelFromMatch() {
+    public void testGetLevelFromMatch() throws UsernameDoesNotExistException, UsernameisNotInMatchException {
     }
     @Test
-    public void testGetMatchTotalPoints() {
+    public void testGetMatchTotalPoints() throws UsernameDoesNotExistException, UsernameisNotInMatchException {
     }
     @Test
-    public void testNextLevel() {
+    public void testNextLevel() throws UsernameDoesNotExistException, UsernameisNotInMatchException {
     }
     @Test
-    public void testEndMatch() {
+    public void testEndMatch() throws UsernameDoesNotExistException, UsernameisNotInMatchException {
     }
-    @Test
-    public void testAddObjectToStore(){
+    @Test//we could add exception objectID does not exist
+    public void testAddObjectToStore() {
 
     }
     @Test
-    public void testGetPlayedMatches() {
+    public void testGetPlayedMatches() {//we could add exception user does not exist
 
     }
 }
