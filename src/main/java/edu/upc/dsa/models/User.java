@@ -14,7 +14,9 @@ public class User {
     String state;
     int age;
 
-
+    public void setPointsEarned(int pointsEarned) {
+        this.pointsEarned = pointsEarned;
+    }
 
     //empty constructor
     int pointsEarned; //We need an attribute points to buy!!!!!

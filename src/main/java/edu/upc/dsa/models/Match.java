@@ -8,20 +8,18 @@ public class Match {
     int totalPoints;
     int currentLVL;
     int maxLVL;
-    boolean isInMatch;
     List<Integer> pointsObtainedPerLevel;
 
     //empty constructor
-    public Match(){this.isInMatch=false;}//must have isInMatch = false to avoid errors.
+    public Match(){}//must have isInMatch = false to avoid errors.
 
     //fully constructor
     public Match(String username ) {
         this.username = username;
         this.totalPoints = 0;//user always starts with 0 points
-        this.currentLVL = 0;//user always start at level 0
+        this.currentLVL = 1;//user always start at level 1
         //This value will change at the end of the project because it depends on the number od levels we make, we start with 3
         this.maxLVL = 3;
-        this.isInMatch = true;
         this.pointsObtainedPerLevel = new ArrayList<>();
     }
 
@@ -66,13 +64,6 @@ public class Match {
         this.maxLVL = maxLVL;
     }
 
-    public boolean isInMatch() {
-        return isInMatch;
-    }
-
-    public void setInMatch(boolean inMatch) {
-        isInMatch = inMatch;
-    }
 
     //methods
     public void nextLevel(int points){//method to change to the next level
@@ -81,14 +72,8 @@ public class Match {
         pointsObtainedPerLevel.add(points);
     }
 
-    public void endMatch(int points){//method to end the match if the user is at the last level
+    public void endMatchLastLevel(int points){//method to end the match if the user is at the last level
         this.totalPoints = this.totalPoints+points;
         pointsObtainedPerLevel.add(points);
-        this.isInMatch=false;
     }
-
-    public void endMatchNow(){//method used to end the match without finishing the level. Points are not saved.
-        this.isInMatch=false;
-    }
-
 }

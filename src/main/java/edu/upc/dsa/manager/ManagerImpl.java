@@ -1,5 +1,6 @@
 package edu.upc.dsa.manager;
 
+import edu.upc.dsa.exceptions.ObjectIDDoesNotExist;
 import edu.upc.dsa.exceptions.UsernameDoesNotExistException;
 import edu.upc.dsa.exceptions.UsernameIsInMatchException;
 import edu.upc.dsa.exceptions.UsernameisNotInMatchException;
@@ -16,7 +17,7 @@ public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
     HashMap<String,User> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
-    HashMap<String,Match> matches; // Key = username
+    HashMap<String,Match> activeMatches; // Key = username
 
 
     private static Manager instance;
@@ -30,7 +31,7 @@ public class ManagerImpl implements Manager{
     public ManagerImpl(){
         this.users = new HashMap<>();
         this.storeObjects = new HashMap<>();
-        this.matches = new HashMap<>();
+        this.activeMatches = new HashMap<>();
     }
     public int storeSize() {
         int ret = this.storeObjects.size();
@@ -45,9 +46,13 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public User getUser(String username) {
-        logger.info("getUser("+username+")");
-       return users.get(username);
+    public User getUser(String username) throws UsernameDoesNotExistException{
+        if(users.get(username)==null){
+            throw new UsernameDoesNotExistException("User does not exist");
+        }else{
+            logger.info("getUser("+username+")");
+            return users.get(username);
+        }
     }
     @Override
     public List<User> getAllUsers() {
@@ -90,13 +95,18 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void addItemToUser(String username, StoreObject item) {
+    public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist {
         User user = users.get(username);
-        if(user != null){
-            user.addNewOwnedObject(item);
-            logger.info("The item:"+item+"was added into the User:"+username);
+        if(user == null){
+            logger.warn("User does not exist");
+            throw new UsernameDoesNotExistException("User does not exist");
+        }else if(objectID==null){
+            logger.warn("ObjectID does not exist");
+            throw new ObjectIDDoesNotExist("ObjectID does not exist");
+        } else {
+            user.addNewOwnedObject(objectID);
+            logger.info("The item:"+objectID+" was added into the User: "+username);
         }
-        else logger.warn("User don't exit");
     }
 
     @Override
@@ -105,12 +115,12 @@ public class ManagerImpl implements Manager{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
-        }else if (matches.get(username).isInMatch()){
+        }else if (activeMatches.get(username)!=null){
             logger.warn("User is currently in match");
             throw new UsernameIsInMatchException("User is in match");
         }else {
             Match m = new Match(username);
-            matches.put(username, m);
+            activeMatches.put(username, m);
             logger.info("Match created");
         }
     }
@@ -121,11 +131,11 @@ public class ManagerImpl implements Manager{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
-        }else if(!matches.get(username).isInMatch()){
+        }else if(activeMatches.get(username)==null){
             logger.warn(username+"is not in a match");
             throw new UsernameisNotInMatchException("User is not in a match");
         } else {
-            int level = matches.get(username).getCurrentLVL();
+            int level = activeMatches.get(username).getCurrentLVL();
             logger.info("Current level: "+level);
             return level;
         }
@@ -137,51 +147,54 @@ public class ManagerImpl implements Manager{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
-        }else if(!matches.get(username).isInMatch()){
+        }else if(activeMatches.get(username)==null){
             logger.warn(username+"is not in a match");
             throw new UsernameisNotInMatchException("User is not in a match");
         } else {
-            int points = matches.get(username).getTotalPoints();
+            int points = activeMatches.get(username).getTotalPoints();
             logger.info("Total current points: "+points);
             return points;
         }
     }
 
     @Override
-    public void NextLevel(String username, int points) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
-        logger.info("Save user "+username+" goes to the next level with "+points);
+    public void nextLevel(String username, int points) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
+
+        Match activeMatchExists = activeMatches.get(username);
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
-        }else if(!matches.get(username).isInMatch()){
+        }else if(activeMatchExists==null){
             logger.warn(username+"is not in a match");
             throw new UsernameisNotInMatchException("User is not in match");
-        } else {
-            if(matches.get(matches).getCurrentLVL()<matches.get(username).getMaxLVL()){
-                matches.get(username).nextLevel(points);
-                logger.info("User has changed to the next level");
-            }else{
-                //User was in last level
-                matches.get(username).endMatch(points);
-                Match m = matches.get(username);
-                users.get(username).addNewFinishedMatch(m);
-                logger.info("User has finished match, all levels passed");
-            }
+        }else if(activeMatchExists.getCurrentLVL()< activeMatchExists.getMaxLVL()){
+            logger.info("User will try to be changed to the next level");
+            activeMatchExists.nextLevel(points);
+            logger.info("User "+username+" goes to the next level with "+points);
+            logger.info("User has changed to the next level");
+        }else{
+            //User was in last level
+            logger.info("Trying to end match");
+            activeMatchExists.endMatchLastLevel(points);
+            logger.info("EndMatch Run");
+            users.get(username).addNewFinishedMatch(activeMatchExists);
+            activeMatches.remove(username);
+            logger.info("User has finished match, all levels passed");
         }
     }
 
     @Override
-    public void EndMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException{
+    public void endMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
-        }else if(!matches.get(username).isInMatch()){
+        }else if(activeMatches.get(username)==null){
             logger.warn(username+"is not in a match");
             throw new UsernameisNotInMatchException("User is not in match");
         } else {
-            matches.get(username).endMatchNow();
-            Match m = matches.get(username);
+            Match m = activeMatches.get(username);
             users.get(username).addNewFinishedMatch(m);
+            activeMatches.remove(username);
             logger.info("User has ended match");
         }
     }
@@ -196,5 +209,14 @@ public class ManagerImpl implements Manager{
         }
         else logger.warn("this object already exists");
     }
-
+    @Override
+    public StoreObject getObject(String objectID){
+        logger.info("Get object ("+objectID+")");
+        return storeObjects.get(objectID);
+    }
+    @Override
+    public Match getMatch(String username){
+        logger.info("get match for ("+username+")");
+        return activeMatches.get(username);
+    }
 }
