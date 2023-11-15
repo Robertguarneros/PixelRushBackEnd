@@ -144,15 +144,15 @@ public class ManagerImplTest {
         //Create a match to try it.
         this.m.createMatch("robertoguarneros11");
        //Test changing level from 1 to 2
-        this.m.getMatch("robertoguarneros11").nextLevel(100);
+        this.m.nextLevel("robertoguarneros11",100);
         Assert.assertEquals(100,this.m.getMatch("robertoguarneros11").getTotalPoints());
         Assert.assertEquals(2,this.m.getMatch("robertoguarneros11").getCurrentLVL());
         //Test changing from 2 to 3
-        this.m.getMatch("robertoguarneros11").nextLevel(100);
+        this.m.nextLevel("robertoguarneros11",100);
         Assert.assertEquals(200,this.m.getMatch("robertoguarneros11").getTotalPoints());
         Assert.assertEquals(3,this.m.getMatch("robertoguarneros11").getCurrentLVL());
         //Test changing level from 3, it should end match.
-        this.m.getMatch("robertoguarneros11").nextLevel(100);
+        this.m.nextLevel("robertoguarneros11",100);
         Assert.assertNull(this.m.getMatch("robertoguarneros11"));
 
         //Testing exceptions
