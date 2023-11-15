@@ -15,6 +15,8 @@ import io.swagger.annotations.ApiResponses;
 import org.reflections.Store;
 
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +35,7 @@ public class Service {
             m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",22);
             m.createMatch("robertoguarneros11");
             m.endMatch("robertoguarneros11");
+            m.getUser("robertoguarneros11").setPointsEarned(500);//set 500 points so we can testAddItem
 
             m.register("titi", "456","Carles","Sanchez","titi@gmail.com",22);
             m.createMatch("titi");
@@ -47,27 +50,27 @@ public class Service {
     @GET
     @ApiOperation(value = "Get current store size", notes = "")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Integer.class)
+            @ApiResponse(code = 200, message = "OK")
     })
     @Path("/getStoreSize")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStoreSize() {
         int storeSize=this.m.storeSize();
-
-        return Response.status(200).entity(storeSize).build()  ;
+        JsonObject jsonResponse = Json.createObjectBuilder().add("Number of Items on the store", storeSize).build();//we create a new json object to be able to send the integer
+        return Response.status(200).entity(jsonResponse.toString()).build();
     }
 //Get number of users does not work, fix
     @GET
     @ApiOperation(value = "Get number of users", notes = "")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Integer.class)
+            @ApiResponse(code = 200, message = "OK")
     })
     @Path("/getNumberOfUsers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getNumberOfUsers() {
         int numOfUsers = this.m.numberOfUsers();
-
-        return Response.status(200).entity(numOfUsers).build();
+        JsonObject jsonResponse = Json.createObjectBuilder().add("number of users", numOfUsers).build();
+        return Response.status(200).entity(jsonResponse.toString()).build();
     }
 
 //get user
@@ -226,11 +229,12 @@ public class Service {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getLevelFromActiveMatch(@PathParam("username")String username){
         try {
-            this.m.getLevelFromMatch(username);
+            int level = this.m.getLevelFromMatch(username);
+            JsonObject jsonResponse = Json.createObjectBuilder().add("username", username).add("level", level).build();
+            return Response.status(200).entity(jsonResponse.toString()).build();
         } catch(UsernameDoesNotExistException | UsernameisNotInMatchException e){
             return Response.status(404).build();
         }
-        return Response.status(200).build();
     }
     // Get TotalMatchPoints from active Match
     @GET
@@ -243,11 +247,12 @@ public class Service {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response getMatchPointsFromActiveMatch(@PathParam("username")String username){
         try {
-            this.m.getMatchTotalPoints(username);
+            int matchPoints = this.m.getMatchTotalPoints(username);
+            JsonObject jsonResponse = Json.createObjectBuilder().add("username", username).add("matchPoints", matchPoints).build();
+            return Response.status(200).entity(jsonResponse.toString()).build();
         } catch(UsernameDoesNotExistException | UsernameisNotInMatchException e){
             return Response.status(404).build();
         }
-        return Response.status(200).build();
     }
     // Next Level
     @PUT
