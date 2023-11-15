@@ -11,6 +11,7 @@ import edu.upc.dsa.models.Match;
 import java.util.List;
 
 public interface Manager {
+    public int size();
     public int numberOfUsers();
     public User getUser(String username)throws UsernameDoesNotExistException;
     public List<User> getAllUsers();

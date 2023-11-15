@@ -33,6 +33,11 @@ public class ManagerImpl implements Manager{
         this.storeObjects = new HashMap<>();
         this.activeMatches = new HashMap<>();
     }
+    public int size(){
+        int ret = this.users.size();
+        logger.info("Size: " + ret);
+        return ret;
+    }
     public int storeSize() {
         int ret = this.storeObjects.size();
         logger.info("size " + ret);
@@ -70,6 +75,16 @@ public class ManagerImpl implements Manager{
         if(user != null){
             return user.getMatchesPlayed();
         }else return null;
+    }
+    @Override
+    public StoreObject getObject(String objectID){
+        logger.info("Get object ("+objectID+")");
+        return storeObjects.get(objectID);
+    }
+    @Override
+    public Match getMatch(String username){
+        logger.info("get match for ("+username+")");
+        return activeMatches.get(username);
     }
 
     @Override
@@ -209,14 +224,5 @@ public class ManagerImpl implements Manager{
         }
         else logger.warn("this object already exists");
     }
-    @Override
-    public StoreObject getObject(String objectID){
-        logger.info("Get object ("+objectID+")");
-        return storeObjects.get(objectID);
-    }
-    @Override
-    public Match getMatch(String username){
-        logger.info("get match for ("+username+")");
-        return activeMatches.get(username);
-    }
+
 }
