@@ -1,9 +1,6 @@
 package edu.upc.dsa.manager;
 
-import edu.upc.dsa.exceptions.ObjectIDDoesNotExist;
-import edu.upc.dsa.exceptions.UsernameDoesNotExistException;
-import edu.upc.dsa.exceptions.UsernameIsInMatchException;
-import edu.upc.dsa.exceptions.UsernameisNotInMatchException;
+import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.Match;
 import edu.upc.dsa.models.StoreObject;
@@ -88,25 +85,33 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void register(String username, String password, String name, String surname, String mail, int age) {
+    public void register(String username, String password, String name, String surname, String mail, int age) throws UsernameDoesExist {
         logger.info("Create user with ID= "+username);
         if(!users.containsKey(username)){
             User newUser = new User(username, password,mail,name,surname,age);
             users.put(username, newUser); //add new user
             logger.info("User successfully created");
         }
-        else logger.warn("this username already exists");
+        else {logger.warn("this username already exists");
+        throw new UsernameDoesExist("This Username does exist");}
     }
 
     @Override
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
         User user = users.get(username);
         if (user != null && user.getPassword().equals(password)){
             logger.info("Welcome User:"+username);
             return true;
         }
-        else{logger.warn("Username or Password was incorrect");
-        return false;}
+        if(!user.getPassword().equals(password)){
+            logger.warn("Username or Password was incorrect");
+            throw new IncorrectPassword("Username or Passwaor was incorrect");
+        }
+        if (user == null){
+            logger.warn("Username or Password was incorrect");
+            throw new UsernameDoesNotExistException("Username or Passwaor was incorrect");
+        }
+        return false;
     }
 
     @Override

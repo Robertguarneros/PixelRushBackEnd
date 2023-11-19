@@ -1,8 +1,5 @@
 package edu.upc.dsa.services;
-import edu.upc.dsa.exceptions.ObjectIDDoesNotExist;
-import edu.upc.dsa.exceptions.UsernameDoesNotExistException;
-import edu.upc.dsa.exceptions.UsernameIsInMatchException;
-import edu.upc.dsa.exceptions.UsernameisNotInMatchException;
+import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.manager.Manager;
 import edu.upc.dsa.manager.ManagerImpl;
 import edu.upc.dsa.models.Match;
@@ -29,7 +26,7 @@ import java.util.List;
 public class Service {
     private Manager m;
 
-    public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException {
+    public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist {
         this.m = ManagerImpl.getInstance();
         if(m.size()==0){
             m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",22);
@@ -169,8 +166,12 @@ public class Service {
     @Path("/registerNewUser")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response registerNewUser(User user){
-        this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getAge());
-        return Response.status(201).build();
+        try {
+            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getAge());
+            return Response.status(201).build();
+        }catch (UsernameDoesExist e){
+            return  Response.status(404).build();
+        }
     }
     //login
     @POST
@@ -181,8 +182,14 @@ public class Service {
     @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response login(User user){
-        this.m.login(user.getUsername(), user.getPassword());
-        return Response.status(201).build();
+        try {
+            this.m.login(user.getUsername(), user.getPassword());
+            return Response.status(201).build();
+        } catch (UsernameDoesNotExistException e) {
+            throw new RuntimeException(e);
+        } catch (IncorrectPassword e) {
+            throw new RuntimeException(e);
+        }
     }
     // Add item to user
     @PUT

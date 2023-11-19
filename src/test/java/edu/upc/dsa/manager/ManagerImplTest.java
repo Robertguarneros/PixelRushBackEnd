@@ -1,10 +1,7 @@
 package edu.upc.dsa.manager;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import edu.upc.dsa.exceptions.ObjectIDDoesNotExist;
-import edu.upc.dsa.exceptions.UsernameDoesNotExistException;
-import edu.upc.dsa.exceptions.UsernameIsInMatchException;
-import edu.upc.dsa.exceptions.UsernameisNotInMatchException;
+import edu.upc.dsa.exceptions.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +12,7 @@ public class ManagerImplTest {
     Manager m;
 
     @BeforeEach
-    public void setUp()  {
+    public void setUp()  throws UsernameDoesExist{
         this.m = new ManagerImpl();
         m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",22);
         m.register("titi", "456","Carles","Sanchez","titi@gmail.com",22);
@@ -66,7 +63,7 @@ public class ManagerImplTest {
         Assert.assertEquals("skin",this.m.getObjectListFromStore().get(1).getArticleName());
     }
     @Test
-    public void testRegister() {
+    public void testRegister() throws UsernameDoesExist{
         this.m.register("prueba","123","Roberto","Guarneros","prueba.com",22);
         Assert.assertEquals(5,this.m.numberOfUsers());
         this.m.register("prueba2","123","Roberto","Guarneros","prueba.com",22);
@@ -77,7 +74,7 @@ public class ManagerImplTest {
         Assert.assertEquals(6,this.m.numberOfUsers());
     }
     @Test
-    public void testLogin() {//test to try login, if password is correct it returns true, if it is wrong it returns false
+    public void testLogin() throws UsernameDoesNotExistException, IncorrectPassword {//test to try login, if password is correct it returns true, if it is wrong it returns false
         boolean True;
         Assert.assertTrue(this.m.login("robertoguarneros11","123"));
         Assert.assertFalse(this.m.login("robertoguarneros11","12sdaf3"));
