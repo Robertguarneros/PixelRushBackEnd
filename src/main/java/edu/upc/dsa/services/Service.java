@@ -46,7 +46,7 @@ public class Service {
         }
     }
 
-    //get store size does not work, fix
+    //get store size
     @GET
     @ApiOperation(value = "Get current store size", notes = "")
     @ApiResponses(value = {
@@ -59,7 +59,7 @@ public class Service {
         JsonObject jsonResponse = Json.createObjectBuilder().add("Number of Items on the store", storeSize).build();//we create a new json object to be able to send the integer
         return Response.status(200).entity(jsonResponse.toString()).build();
     }
-//Get number of users does not work, fix
+//Get number of users
     @GET
     @ApiOperation(value = "Get number of users", notes = "")
     @ApiResponses(value = {
@@ -295,7 +295,7 @@ public class Service {
             @ApiResponse(code = 201, message = "New object added successfully"),
             @ApiResponse(code = 404, message = "objectID already exists")
     })
-    @Path("/addObjectToStore/")
+    @Path("/addObjectToStore")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response addObjectToStore(StoreObject object){
         this.m.addObjectToStore(object.getObjectID(),object.getArticleName(),object.getPrice(),object.getDescription());
