@@ -105,11 +105,11 @@ public class ManagerImpl implements Manager{
         }
         if(!user.getPassword().equals(password)){
             logger.warn("Username or Password was incorrect");
-            throw new IncorrectPassword("Username or Passwaor was incorrect");
+            throw new IncorrectPassword("Username or Password was incorrect");
         }
         if (user == null){
             logger.warn("Username or Password was incorrect");
-            throw new UsernameDoesNotExistException("Username or Passwaor was incorrect");
+            throw new UsernameDoesNotExistException("Username or Password was incorrect");
         }
         return false;
     }
