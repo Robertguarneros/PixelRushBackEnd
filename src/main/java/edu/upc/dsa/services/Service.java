@@ -165,9 +165,15 @@ public class Service {
     })
     @Path("/registerNewUser")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response registerNewUser(User user){
+    public Response registerNewUser(JsonObject jsonInput){
+        String username = jsonInput.getString("username");
+        String password = jsonInput.getString("password");
+        String name = jsonInput.getString("name");
+        String surname = jsonInput.getString("surname");
+        String mail = jsonInput.getString("mail");
+        int age = jsonInput.getInt("age");
         try {
-            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getAge());
+            this.m.register(username,password,name,surname,mail,age);
             return Response.status(201).build();
         }catch (UsernameDoesExist e){
             return  Response.status(404).build();
