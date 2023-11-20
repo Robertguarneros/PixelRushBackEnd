@@ -18,15 +18,14 @@ public class User {
         this.pointsEarned = pointsEarned;
     }
 
-    //empty constructor
     int pointsEarned; //We need an attribute points to buy!!!!!
     //Played Matches list
     List<Match> matchesPlayed;
     //list of owned objects;
     List<StoreObject> ownedObjects;
-
+    //empty constructor
     public User(){}
-    // fully constructor
+    // full constructor
     public User(String username, String password, String mail, String name,
                 String surname, int age) {
         this.username = username;

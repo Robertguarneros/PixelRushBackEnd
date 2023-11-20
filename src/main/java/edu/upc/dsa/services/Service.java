@@ -2,14 +2,12 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.manager.Manager;
 import edu.upc.dsa.manager.ManagerImpl;
+import edu.upc.dsa.models.bodies.LoginCredentials;
 import edu.upc.dsa.models.Match;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.reflections.Store;
+import edu.upc.dsa.models.bodies.RegisterCredentials;
+import io.swagger.annotations.*;
 
 
 import javax.json.Json;
@@ -165,15 +163,9 @@ public class Service {
     })
     @Path("/registerNewUser")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response registerNewUser(JsonObject jsonInput){
-        String username = jsonInput.getString("username");
-        String password = jsonInput.getString("password");
-        String name = jsonInput.getString("name");
-        String surname = jsonInput.getString("surname");
-        String mail = jsonInput.getString("mail");
-        int age = jsonInput.getInt("age");
+    public Response registerNewUser(RegisterCredentials user){
         try {
-            this.m.register(username,password,name,surname,mail,age);
+            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getAge());
             return Response.status(201).build();
         }catch (UsernameDoesExist e){
             return  Response.status(404).build();
@@ -187,11 +179,9 @@ public class Service {
     })
     @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response login(JsonObject jsonInput) {
-        String username = jsonInput.getString("username");
-        String password = jsonInput.getString("password");
+    public Response login(LoginCredentials loginCredentials){
         try {
-            this.m.login(username, password);
+            this.m.login(loginCredentials.getUsername(), loginCredentials.getPassword());
             return Response.status(201).build();
         } catch (UsernameDoesNotExistException e) {
             throw new RuntimeException(e);
@@ -295,7 +285,7 @@ public class Service {
     })
     @Path("/endMatch/{username}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response nextLevel(@PathParam("username")String username){
+    public Response endMatch(@PathParam("username")String username){
         try {
             this.m.endMatch(username);
         } catch(UsernameDoesNotExistException | UsernameisNotInMatchException e){
