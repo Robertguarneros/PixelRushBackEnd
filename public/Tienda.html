@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Shop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .detalles {
+            display: none;
+            position: absolute;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .nuevaFotoInput {
+            max-width: 50%;
+            height: auto;
+        }
+
+        #miTabla td:first-child,
+        #miTabla th:first-child {
+            display: none;
+        }
+        /* Ajustes de tamaño de columna */
+        #miTabla th:nth-child(3),
+        #miTabla td:nth-child(3) {
+            max-width: 50px;
+        }
+
+        #miTabla th:nth-child(4),
+        #miTabla td:nth-child(4) {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container mt-3 division1">
+    <h1 class="display-1"> SHOP </h1>
+    <p>The following table it's a list of the objects that you can buy on the android app. If you want more information about each product, click the product.</p>
+    <table id="miTabla">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Foto</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="filaDatos" onclick="mostrarDetalles(this)">
+            <td>1</td>
+            <td><strong>Viagra</strong></td>
+            <td><img src="product.jpg" alt="Imagen 1"></td>
+            <td>pa awelos</td>
+            <td>10 euro</td>
+        </tr>
+        <tr class="filaDatos" onclick="mostrarDetalles(this)">
+            <td>2</td>
+            <td><strong>Poción</strong></td>
+            <td><img src="jagger.jpg" alt="Imagen 2"></td>
+            <td>cura 50 hp</td>
+            <td>10 euro</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Botón para abrir el modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#miModal">Agregar Nuevo Producto</button>
+
+    <!-- Modal con campos de texto y carga de archivo -->
+    <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="miModalLabel">Agregar Nuevo Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="nuevoProducto" class="form-label">Nuevo Producto:</label>
+                    <input type="text" class="form-control" id="nuevoProducto" oninput="validarCampos()">
+
+                    <label for="nuevaDescripcion" class="form-label">Descripción:</label>
+                    <input type="text" class="form-control" id="nuevaDescripcion" oninput="validarCampos()">
+
+                    <label for="nuevoPrecio" class="form-label">Precio:</label>
+                    <input type="text" class="form-control" id="nuevoPrecio" oninput="validarCampos()">
+
+                    <label for="nuevaFoto" class="form-label">Foto:</label>
+                    <input type="file" class="form-control nuevaFotoInput" id="nuevaFoto" oninput="validarCampos()">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnAgregar" disabled onclick="agregarProducto()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Función para validar campos y habilitar/deshabilitar el botón Agregar
+    function validarCampos() {
+        var nuevoProducto = document.getElementById("nuevoProducto").value;
+        var nuevaDescripcion = document.getElementById("nuevaDescripcion").value;
+        var nuevoPrecio = document.getElementById("nuevoPrecio").value;
+        var nuevaFoto = document.getElementById("nuevaFoto").files[0];
+
+        var btnAgregar = document.getElementById("btnAgregar");
+        btnAgregar.disabled = !(nuevoProducto && nuevaDescripcion && nuevoPrecio && nuevaFoto);
+    }
+
+    // Función para agregar un nuevo producto
+    function agregarProducto() {
+        var nuevoProducto = document.getElementById("nuevoProducto").value;
+        var nuevaDescripcion = document.getElementById("nuevaDescripcion").value;
+        var nuevoPrecio = document.getElementById("nuevoPrecio").value;
+        var nuevaFoto = document.getElementById("nuevaFoto").files[0];
+
+        // Verifica si se ha adjuntado una imagen
+        if (!nuevaFoto) {
+            alert("Adjunta una imagen antes de agregar");
+            return;
+        }
+
+        // Crea una nueva fila y agrega celdas con la información proporcionada
+        var tabla = document.getElementById("miTabla").getElementsByTagName('tbody')[0];
+        var nuevaFila = tabla.insertRow(tabla.rows.length);
+        var celdaID = nuevaFila.insertCell(0);
+        var celdaProducto = nuevaFila.insertCell(1);
+        var celdaFoto = nuevaFila.insertCell(2);
+        var celdaDescripcion = nuevaFila.insertCell(3);
+        var celdaPrecio = nuevaFila.insertCell(4);
+
+        // Asigna valores a las celdas
+        celdaID.innerText = tabla.rows.length;
+        celdaProducto.innerHTML = `<strong>${nuevoProducto}</strong>`;
+        celdaFoto.innerHTML = `<img src="${URL.createObjectURL(nuevaFoto)}" alt="Imagen" class="nuevaFotoInput">`;
+        celdaDescripcion.innerText = nuevaDescripcion;
+        celdaPrecio.innerText = nuevoPrecio;
+
+        // Vacía los campos de texto después de agregar el producto
+        document.getElementById("nuevoProducto").value = "";
+        document.getElementById("nuevaDescripcion").value = "";
+        document.getElementById("nuevoPrecio").value = "";
+        document.getElementById("nuevaFoto").value = "";
+
+        // No cierra el modal
+        // var modal = new bootstrap.Modal(document.getElementById("miModal"));
+        // modal.hide();
+    }
+</script>
+</body>
+</html>
