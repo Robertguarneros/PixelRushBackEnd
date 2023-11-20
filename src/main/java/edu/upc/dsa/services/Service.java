@@ -181,9 +181,12 @@ public class Service {
     })
     @Path("/login")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response login(User user){
+    public Response login(JsonObject jsonInput) {
+        String username = jsonInput.getString("username");
+        String password = jsonInput.getString("password");
+
         try {
-            this.m.login(user.getUsername(), user.getPassword());
+            this.m.login(username, password);
             return Response.status(201).build();
         } catch (UsernameDoesNotExistException e) {
             throw new RuntimeException(e);
