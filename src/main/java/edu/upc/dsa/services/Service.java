@@ -190,7 +190,6 @@ public class Service {
     public Response login(JsonObject jsonInput) {
         String username = jsonInput.getString("username");
         String password = jsonInput.getString("password");
-
         try {
             this.m.login(username, password);
             return Response.status(201).build();

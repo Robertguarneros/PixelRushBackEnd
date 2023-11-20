@@ -7,6 +7,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- CSS to initially hide elements -->
+    <style>
+        .confirmation-message {
+            display: none;
+        }
+    </style>
+
+    <!-- JavaScript to show elements on button click -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Registration form submission
+            document.getElementById('confirmBtnRegister').addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Get form data
+                var formData = {
+                    username: $('#miTextbox2').val(),
+                    password: $('#miTextbox5').val()
+                    // Add other form fields as needed
+                };
+
+                // Make a POST request to the server
+                fetch('http://localhost:8080/dsaApp/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display confirmation message
+                    $('.confirmation-message').text('Registration successful!').show();
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            // Login form submission
+            document.getElementById('confirmBtnLogin').addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Get form data
+                var formData = {
+                    username: $('#miTextbox7').val(),
+                    password: $('#miTextbox8').val()
+                };
+
+                // Make a POST request to the server
+                fetch('http://localhost:8080/dsaApp/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Display confirmation message or handle login response
+                    $('.confirmation-message').text('Login successful!').show();
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container p-5 my-5 bg-dark text-white">
@@ -22,7 +88,8 @@
     <button type="button" class="btn btn-success mx-2" data-bs-toggle="modal" data-bs-target="#myModal"> Registrarse </button>
     <button type="button" class="btn btn-success mx2" data-bs-toggle="modal" data-bs-target="#myModal2"> Log In </button>
 </div>
-<!-- The Modal -->
+
+<!-- Registration Modal -->
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -35,34 +102,29 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                For register in put the following information:
-                <dt>Name</dt>
-                <input type="text" class="form-control" id="miTextbox0" placeholder="Write your name">
-                <dt>Surname</dt>
-                <input type="text" class="form-control" id="miTextbox1" placeholder="Write your surnname">
                 <dt>User ID</dt>
                 <input type="text" class="form-control" id="miTextbox2" placeholder="Write your User ID">
-                <dt>Mail</dt>
-                <input type="text" class="form-control" id="miTextbox3" placeholder="Write your mail">
-                <dt>Age</dt>
-                <input type="text" class="form-control" id="miTextbox4" placeholder="Write your age">
                 <dt>Password</dt>
                 <input type="text" class="form-control" id="miTextbox5" placeholder="Write your password">
-                <!-- <dt>Confirm Password</dt>
-                <input type="text" class="form-control" id="miTextbox6" placeholder="Confirm your password"> -->
-            </div>
 
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="confirmBtn" data-bs-dismiss="modal" onclick="irAPantallaPrincipal()" disabled>Confirmar</button>
-
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmBtnRegister" data-bs-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
 
         </div>
     </div>
 </div>
 
+<!-- Confirmation Message -->
+<div class="container mt-3 confirmation-message">
+    <div class="alert alert-success" role="alert">
+        Registration successful!
+    </div>
+</div>
+
+<!-- Log In Modal -->
 <div class="modal fade" id="myModal2">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -75,86 +137,20 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                For log in put the following information:
                 <dt>Name</dt>
                 <input type="text" class="form-control" id="miTextbox7" placeholder="Write your Username">
                 <dt>Password</dt>
                 <input type="text" class="form-control" id="miTextbox8" placeholder="Write your password">
-            </div>
 
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="loginBtn" data-bs-dismiss="modal" onclick="irAPantallaPrincipal()" disabled>Confirmar</button>
-
-
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmBtnLogin" data-bs-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
 
         </div>
     </div>
 </div>
 
-<script>
-    function irAPantallaPrincipal() {
-        window.location.href = "Pantalla Principal.html";
-    }
-</script>
-
-<script>
-    // Obtén referencias a los campos de texto y al botón Confirmar
-    var nameInput = document.getElementById("miTextbox0");
-    var surnameInput = document.getElementById("miTextbox1");
-    var userIDInput = document.getElementById("miTextbox2");
-    var mailInput = document.getElementById("miTextbox3");
-    var ageInput = document.getElementById("miTextbox4");
-    var passwordInput = document.getElementById("miTextbox");
-    var confirmBtn = document.getElementById("confirmBtn");
-
-    // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
-    nameInput.addEventListener("input", validarCampos);
-    surnameInput.addEventListener("input", validarCampos);
-    userIDInput.addEventListener("input", validarCampos);
-    mailInput.addEventListener("input", validarCampos);
-    ageInput.addEventListener("input", validarCampos);
-    passwordInput.addEventListener("input", validarCampos);
-
-    // Función para validar campos y habilitar/deshabilitar el botón Confirmar
-    function validarCampos() {
-        var camposCompletos =
-            nameInput.value !== "" &&
-            surnameInput.value !== "" &&
-            userIDInput.value !== "" &&
-            mailInput.value !== "" &&
-            ageInput.value !== "" &&
-            passwordInput.value !== "";
-
-        confirmBtn.disabled = !camposCompletos;
-    }
-
-    // Función para redirigir a la pantalla principal
-    function irAPantallaPrincipal() {
-        window.location.href = "Pantalla Principal.html";
-    }
-</script>
-
-<script>
-    // Obtén referencias a los campos de texto y al botón Log In
-    var usernameInput = document.getElementById("miTextbox5");
-    var passwordLoginInput = document.getElementById("miTextbox6");
-    var loginBtn = document.getElementById("loginBtn");
-
-    // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
-    usernameInput.addEventListener("input", validarCamposLogin);
-    passwordLoginInput.addEventListener("input", validarCamposLogin);
-
-    // Función para validar campos y habilitar/deshabilitar el botón Log In
-    function validarCamposLogin() {
-        var camposCompletosLogin =
-            usernameInput.value !== "" &&
-            passwordLoginInput.value !== "";
-
-        loginBtn.disabled = !camposCompletosLogin;
-    }
-</script>
 </body>
 </html>

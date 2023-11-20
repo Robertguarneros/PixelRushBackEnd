@@ -99,6 +99,9 @@ public class ManagerImpl implements Manager{
     @Override
     public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
         User user = users.get(username);
+        logger.info("username: "+user.getUsername());
+        logger.info("Password: "+user.getPassword());
+
         if (user != null && user.getPassword().equals(password)){
             logger.info("Welcome User:"+username);
             return true;
