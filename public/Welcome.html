@@ -169,7 +169,7 @@
                 <dt>Mail</dt>
                 <input type="text" class="form-control" id="miTextbox3" placeholder="Write your mail">
                 <dt>Age</dt>
-                <input type="text" class="form-control" id="miTextbox4" placeholder="Write your age">
+                <input type="text" class="form-control" id="miTextbox4" oninput="validarNumero(this)" placeholder="Write your age">
                 <dt>Password</dt>
                 <input type="password" class="form-control" id="miTextbox5" placeholder="Enter your password">
                 <!-- <dt>Confirm Password</dt>
@@ -270,6 +270,13 @@
             passwordLoginInput.value !== "";
 
         loginBtn.disabled = !camposCompletosLogin;
+    }
+    function validarNumero(input) {
+        // Filtrar y mantener solo dígitos
+        var valor = input.value.replace(/[^0-9]/g, '');
+
+        // Actualizar el valor del input con los dígitos filtrados
+        input.value = valor;
     }
 </script>
 
