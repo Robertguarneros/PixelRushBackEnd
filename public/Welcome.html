@@ -55,12 +55,22 @@
                         success: function (data, status) {
                             if (status === 'success') {
                                 // Display the success message
-                                alert('Registration successful!');
+                                document.getElementById('myAlert3').classList.remove('d-none');
+
+                                // Temporizador para ocultar el alerta después de 5 segundos
+                                setTimeout(function () {
+                                    document.getElementById('myAlert3').classList.add('d-none');
+                                }, 4000);
                             }
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             // Handle registration failure
-                            alert('Registration failed. Please check your input.');
+                            document.getElementById('myAlert4').classList.remove('d-none');
+
+                            // Temporizador para ocultar el alerta después de 5 segundos
+                            setTimeout(function () {
+                                document.getElementById('myAlert4').classList.add('d-none');
+                            }, 4000);
                         }
                     });
                 }
@@ -96,14 +106,24 @@
                                 var userLogin = username;
 
                                 // Display the success message
-                                alert('Login successful! Welcome, ' + userLogin);
+                                document.getElementById('myAlert1').classList.remove('d-none');
+
+                                // Temporizador para ocultar el alerta después de 5 segundos
+                                setTimeout(function () {
+                                    window.location.href = 'MainMenu.html';
+                                }, 4000);
                                 // Redirect to MainMenu.html
-                                window.location.href = 'MainMenu.html';
+
                             }
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             // Handle login failure
-                            alert('Login failed. Please check your credentials.');
+                            document.getElementById('myAlert2').classList.remove('d-none');
+
+                            // Temporizador para ocultar el alerta después de 5 segundos
+                            setTimeout(function () {
+                                document.getElementById('myAlert2').classList.add('d-none');
+                            }, 4000);
                         }
                     });
                 }
@@ -144,17 +164,16 @@
                 <input type="text" class="form-control" id="miTextbox0" placeholder="Write your name">
                 <dt>Surname</dt>
                 <input type="text" class="form-control" id="miTextbox1" placeholder="Write your surnname">
-                <dt>User ID</dt>
+                <dt>Username ID</dt>
                 <input type="text" class="form-control" id="miTextbox2" placeholder="Write your User ID">
                 <dt>Mail</dt>
                 <input type="text" class="form-control" id="miTextbox3" placeholder="Write your mail">
                 <dt>Age</dt>
                 <input type="text" class="form-control" id="miTextbox4" placeholder="Write your age">
                 <dt>Password</dt>
-                <input type="text" class="form-control" id="miTextbox5" placeholder="Write your password">
+                <input type="password" class="form-control" id="miTextbox5" placeholder="Enter your password">
                 <!-- <dt>Confirm Password</dt>
-                <input type="text" class="form-control" id="miTextbox6" placeholder="Confirm your password"> -->
-
+                <input type="password" class="form-control" id="miTextbox6" placeholder="Enter your password">-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="confirmBtnRegister" data-bs-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -177,13 +196,13 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <dt>Name</dt>
+                <dt>Userame</dt>
                 <input type="text" class="form-control" id="miTextbox7" placeholder="Write your Username">
                 <dt>Password</dt>
-                <input type="text" class="form-control" id="miTextbox8" placeholder="Write your password">
+                <input type="password" class="form-control" id="miTextbox8" placeholder="Enter your password">
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="confirmBtnLogin" data-bs-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-success" id="confirmBtnLogin" data-bs-dismiss="modal" disabled>Confirm</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -191,6 +210,68 @@
         </div>
     </div>
 </div>
+<div class="alert alert-success d-none" role="alert" id="myAlert1">
+    <strong>Success!</strong> Login successful! Welcome.
+</div>
+<div class="alert alert-danger d-none" role="alert" id="myAlert2">
+    <strong>Error!</strong> Login failed. Please check your credentials.
+</div>
+<div class="alert alert-success d-none" role="alert" id="myAlert3">
+    <strong>Success!</strong> Register successful!
+</div>
+<div class="alert alert-danger d-none" role="alert" id="myAlert4">
+    <strong>Error!</strong> Register failed. Please check your credentials.
+</div>
+<script>
+    // Obtén referencias a los campos de texto y al botón Confirmar
+    var nameInput = document.getElementById("miTextbox0");
+    var surnameInput = document.getElementById("miTextbox1");
+    var userIDInput = document.getElementById("miTextbox2");
+    var mailInput = document.getElementById("miTextbox3");
+    var ageInput = document.getElementById("miTextbox4");
+    var passwordInput = document.getElementById("miTextbox5");
+    var confirmBtn = document.getElementById("confirmBtnRegister");
+
+    // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
+    nameInput.addEventListener("input", validarCampos);
+    surnameInput.addEventListener("input", validarCampos);
+    userIDInput.addEventListener("input", validarCampos);
+    mailInput.addEventListener("input", validarCampos);
+    ageInput.addEventListener("input", validarCampos);
+    passwordInput.addEventListener("input", validarCampos);
+
+    // Función para validar campos y habilitar/deshabilitar el botón Confirmar
+    function validarCampos() {
+        var camposCompletos =
+            nameInput.value !== "" &&
+            surnameInput.value !== "" &&
+            userIDInput.value !== "" &&
+            mailInput.value !== "" &&
+            ageInput.value !== "" &&
+            passwordInput.value !== "";
+
+        confirmBtn.disabled = !camposCompletos;
+    }
+</script>
+<script>
+    // Obtén referencias a los campos de texto y al botón Log In
+    var usernameInput = document.getElementById("miTextbox7");
+    var passwordLoginInput = document.getElementById("miTextbox8");
+    var loginBtn = document.getElementById("confirmBtnLogin");
+
+    // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
+    usernameInput.addEventListener("input", validarCamposLogin);
+    passwordLoginInput.addEventListener("input", validarCamposLogin);
+
+    // Función para validar campos y habilitar/deshabilitar el botón Log In
+    function validarCamposLogin() {
+        var camposCompletosLogin =
+            usernameInput.value !== "" &&
+            passwordLoginInput.value !== "";
+
+        loginBtn.disabled = !camposCompletosLogin;
+    }
+</script>
 
 </body>
 </html>
