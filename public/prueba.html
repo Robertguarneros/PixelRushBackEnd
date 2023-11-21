@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="logo" style="width:40px;">
+    </a>
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Obtener Lista de Objetos desde la Tienda</h1>
+        <p>Presiona el botón para obtener la lista de objetos desde la tienda:</p>
+        <button id="obtenerListaBtn" class="btn btn-dark">Obtener Lista</button>
+        <div id="errorMensaje" class="text-danger mt-3"></div>
+    </div>
+
+    <h2>Resultados:</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Descripción</th>
+        </tr>
+        </thead>
+        <tbody id="resultados">
+        <!-- Aquí se mostrarán los resultados de la búsqueda -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var resultadosTabla = $('#resultados');
+
+        $.ajax({
+            url: 'http://localhost:8080/dsaApp/pixelRush/getObjectListFromStore',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                resultadosTabla.empty(); // Limpiar resultados previos
+
+                // Iterar sobre la lista de objetos y almacenar cada propiedad en una variable
+                data.forEach(function(objeto) {
+                    resultadosTabla.append(`
+                        <tr>
+                            <td>${objeto.objectID}</td>
+                            <td>${objeto.articleName}</td>
+                            <td><img src="${objeto.articlePhoto|| 'No proporcionada'}" alt="Foto del objeto" width="100"></td>
+                            <td>${objeto.description}</td>
+                            <td>${objeto.price}</td>
+                        </tr>
+                    `);
+                });
+            },
+        });
+    });
+</script>
+</body>
+</html>
+
