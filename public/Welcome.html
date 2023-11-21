@@ -10,6 +10,61 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('confirmBtnRegister').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent form submission (if not needed)
+
+                // Get the values from the input fields
+                var nameInputField = document.getElementById('miTextbox0');
+                var name = nameInputField.value.trim();
+
+                var surnameInputField = document.getElementById('miTextbox1');
+                var surname = surnameInputField.value.trim();
+
+                var userIdInputField = document.getElementById('miTextbox2');
+                var userId = userIdInputField.value.trim();
+
+                var mailInputField = document.getElementById('miTextbox3');
+                var mail = mailInputField.value.trim();
+
+                var ageInputField = document.getElementById('miTextbox4');
+                var age = parseInt(ageInputField.value.trim());
+
+                var passwordInputField = document.getElementById('miTextbox5');
+                var password = passwordInputField.value.trim();
+
+                // Check if the input fields are not empty
+                if (name !== '' && surname !== '' && userId !== '' && mail !== '' && !isNaN(age) && password !== '') {
+                    var pixelRushUrl = 'http://localhost:8080/dsaApp/pixelRush/registerNewUser';
+
+                    // Create a RegisterData object
+                    var registerData = {
+                        username: userId,
+                        password: password,
+                        name: name,
+                        surname: surname,
+                        mail: mail,
+                        age: age
+                    };
+
+                    // Make a POST request to the register API with the RegisterData object
+                    $.ajax({
+                        type: 'POST',
+                        url: pixelRushUrl,
+                        contentType: 'application/json',
+                        data: JSON.stringify(registerData),
+                        success: function (data, status) {
+                            if (status === 'success') {
+                                // Display the success message
+                                alert('Registration successful!');
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Handle registration failure
+                            alert('Registration failed. Please check your input.');
+                        }
+                    });
+                }
+            });
             document.getElementById('confirmBtnLogin').addEventListener('click', function (event) {
                 event.preventDefault(); // Prevent form submission (if not needed)
 
@@ -42,6 +97,8 @@
 
                                 // Display the success message
                                 alert('Login successful! Welcome, ' + userLogin);
+                                // Redirect to MainMenu.html
+                                window.location.href = 'MainMenu.html';
                             }
                         },
                         error: function (xhr, textStatus, errorThrown) {
@@ -51,6 +108,7 @@
                     });
                 }
             });
+
         });
     </script>
 </head>
@@ -82,17 +140,26 @@
 
             <!-- Modal body -->
             <div class="modal-body">
+                <dt>Name</dt>
+                <input type="text" class="form-control" id="miTextbox0" placeholder="Write your name">
+                <dt>Surname</dt>
+                <input type="text" class="form-control" id="miTextbox1" placeholder="Write your surnname">
                 <dt>User ID</dt>
                 <input type="text" class="form-control" id="miTextbox2" placeholder="Write your User ID">
+                <dt>Mail</dt>
+                <input type="text" class="form-control" id="miTextbox3" placeholder="Write your mail">
+                <dt>Age</dt>
+                <input type="text" class="form-control" id="miTextbox4" placeholder="Write your age">
                 <dt>Password</dt>
                 <input type="text" class="form-control" id="miTextbox5" placeholder="Write your password">
+                <!-- <dt>Confirm Password</dt>
+                <input type="text" class="form-control" id="miTextbox6" placeholder="Confirm your password"> -->
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="confirmBtnRegister" data-bs-dismiss="modal">Confirm</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
