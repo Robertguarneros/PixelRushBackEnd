@@ -5,6 +5,7 @@ import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.Match;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Manager {
@@ -14,7 +15,7 @@ public interface Manager {
     public List<User> getAllUsers();
     public List<StoreObject>  getObjectListFromStore();
     public List<Match> getPlayedMatches(String username);
-    public void register(String username, String password, String name, String surname, String mail, int age) throws UsernameDoesExist;
+    public void register(String username, String password, String name, String surname, String mail, Date birthDate) throws UsernameDoesExist;
     public boolean login (String username, String password) throws UsernameDoesNotExistException, IncorrectPassword;
     public void addItemToUser(String username, StoreObject item) throws UsernameDoesNotExistException, ObjectIDDoesNotExist; //add ObjectID to users list of objects
     public void createMatch(String username) throws UsernameDoesNotExistException, UsernameIsInMatchException;

@@ -17,6 +17,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Date;
 
 @Api(value = "/pixelRush", description = "Endpoint to Pixel Rush Service")
 @Path("/pixelRush")
@@ -27,15 +28,15 @@ public class Service {
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist {
         this.m = ManagerImpl.getInstance();
         if(m.size()==0){
-            m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",22);
+            m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",new Date(2000,07,12));
             m.createMatch("robertoguarneros11");
             m.endMatch("robertoguarneros11");
             m.getUser("robertoguarneros11").setPointsEarned(500);//set 500 points so we can testAddItem
 
-            m.register("titi", "456","Carles","Sanchez","titi@gmail.com",22);
+            m.register("titi", "456","Carles","Sanchez","titi@gmail.com",new Date(2000,07,12));
             m.createMatch("titi");
-            m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com",22);
-            m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com",21);
+            m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com",new Date(2000,07,12));
+            m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com",new Date(2000,07,12));
             m.addObjectToStore("123","Poción", 100, "Poción de salto");
             m.addObjectToStore("222","skin",50,"skin cosmetica");
         }
@@ -165,7 +166,7 @@ public class Service {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response registerNewUser(RegisterCredentials user){
         try {
-            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getAge());
+            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getBirthDate());
             return Response.status(201).build();
         }catch (UsernameDoesExist e){
             return  Response.status(404).build();
