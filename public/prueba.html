@@ -1,67 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Seleccionar Fecha de Nacimiento</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <a class="navbar-brand" href="#">
-        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="logo" style="width:40px;">
-    </a>
-</nav>
 
-<div class="container">
-    <div class="jumbotron">
-        <h1>Obtener Lista de Objetos desde la Tienda</h1>
-        <p>Presiona el botón para obtener la lista de objetos desde la tienda:</p>
-        <button id="obtenerListaBtn" class="btn btn-dark">Obtener Lista</button>
-        <div id="errorMensaje" class="text-danger mt-3"></div>
+<div class="container mt-5">
+    <h1>Fecha de Nacimiento</h1>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="dia">Día</label>
+            <select class="form-control" id="dia"></select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="mes">Mes</label>
+            <select class="form-control" id="mes"></select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="anio">Año</label>
+            <select class="form-control" id="anio"></select>
+        </div>
     </div>
+    <script>
+        // Llenar opciones para el día
+        var selectDia = document.getElementById('dia');
+        for (var i = 1; i <= 31; i++) {
+            var option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            selectDia.add(option);
+        }
 
-    <h2>Resultados:</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Descripción</th>
-        </tr>
-        </thead>
-        <tbody id="resultados">
-        <!-- Aquí se mostrarán los resultados de la búsqueda -->
-        </tbody>
-    </table>
+        // Llenar opciones para el mes
+        var selectMes = document.getElementById('mes');
+        var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        for (var i = 0; i < meses.length; i++) {
+            var option = document.createElement('option');
+            option.value = i + 1;
+            option.text = meses[i];
+            selectMes.add(option);
+        }
+
+        // Llenar opciones para el año
+        var selectAnio = document.getElementById('anio');
+        var anioActual = new Date().getFullYear();
+        for (var i = anioActual; i >= 1900; i--) {
+            var option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            selectAnio.add(option);
+        }
+    </script>
 </div>
-
-<script>
-    $(document).ready(function() {
-        var resultadosTabla = $('#resultados');
-
-        $.ajax({
-            url: 'http://localhost:8080/dsaApp/pixelRush/getObjectListFromStore',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                resultadosTabla.empty(); // Limpiar resultados previos
-
-                // Iterar sobre la lista de objetos y almacenar cada propiedad en una variable
-                data.forEach(function(objeto) {
-                    resultadosTabla.append(`
-                        <tr>
-                            <td>${objeto.objectID}</td>
-                            <td>${objeto.articleName}</td>
-                            <td><img src="${objeto.articlePhoto|| 'No proporcionada'}" alt="Foto del objeto" width="100"></td>
-                            <td>${objeto.description}</td>
-                            <td>${objeto.price}</td>
-                        </tr>
-                    `);
-                });
-            },
-        });
-    });
-</script>
 </body>
 </html>
 
