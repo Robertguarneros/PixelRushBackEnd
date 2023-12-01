@@ -16,10 +16,10 @@ public class ManagerImplTest {
     @BeforeEach
     public void setUp()  throws UsernameDoesExist{
         this.m = new ManagerImpl();
-        m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",new Date(2000,07,12));
-        m.register("titi", "456","Carles","Sanchez","titi@gmail.com",new Date(2000,07,12));
-        m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com",new Date(2000,07,12));
-        m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com",new Date(2000,07,12));
+        m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com","02/11/2002");
+        m.register("titi", "456","Carles","Sanchez","titi@gmail.com","02/11/2002");
+        m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com","02/11/2002");
+        m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com","02/11/2002");
         m.addObjectToStore("123","Poción", 100, "Poción de salto");
         m.addObjectToStore("222","skin",50,"skin cosmetica");
     }
@@ -42,7 +42,7 @@ public class ManagerImplTest {
         Assert.assertEquals("123",this.m.getUser("robertoguarneros11").getPassword());
         Assert.assertEquals("Guarneros",this.m.getUser("robertoguarneros11").getSurname());
         Assert.assertEquals("roberto@gmail.com",this.m.getUser("robertoguarneros11").getMail());
-        Assert.assertEquals(new Date(2000,07,12),this.m.getUser("robertoguarneros11").getBirthDate());
+        Assert.assertEquals("02/11/2002",this.m.getUser("robertoguarneros11").getBirthDate());
 
         //Test exception
         Assert.assertThrows(UsernameDoesNotExistException.class,()->this.m.getUser("dsaas"));
@@ -66,14 +66,14 @@ public class ManagerImplTest {
     }
     @Test
     public void testRegister() throws UsernameDoesExist{
-        this.m.register("prueba","123","Roberto","Guarneros","prueba.com",new Date(2000,07,12));
+        this.m.register("prueba","123","Roberto","Guarneros","prueba.com","02/11/2002");
         Assert.assertEquals(5,this.m.numberOfUsers());
-        this.m.register("prueba2","123","Roberto","Guarneros","prueba.com",new Date(2000,07,12));
+        this.m.register("prueba2","123","Roberto","Guarneros","prueba.com","02/11/2002");
         Assert.assertEquals(6,this.m.numberOfUsers());
 
         //Test to verify that if we repeat a username, it is not created
 
-        Assert.assertThrows(UsernameDoesExist.class,()->this.m.register("prueba","123","Roberto","Guarneros","prueba.com",new Date(2000,07,12)));
+        Assert.assertThrows(UsernameDoesExist.class,()->this.m.register("prueba","123","Roberto","Guarneros","prueba.com","02/11/2002"));
     }
     @Test
     public void testLogin() throws UsernameDoesNotExistException, IncorrectPassword {//test to try login, if password is correct it returns true, if it is wrong it returns false

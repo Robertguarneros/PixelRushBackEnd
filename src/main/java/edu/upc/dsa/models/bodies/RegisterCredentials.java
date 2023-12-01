@@ -8,10 +8,10 @@ public class RegisterCredentials {
     String name;
     String surname;
     String mail;
-    Date birthDate;
+    String birthDate;
     public RegisterCredentials(){}
 
-    public RegisterCredentials(String username, String password, String name, String surname, String mail, Date birthDate) {
+    public RegisterCredentials(String username, String password, String name, String surname, String mail, String birthDate) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -60,11 +60,11 @@ public class RegisterCredentials {
         this.mail = mail;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 }

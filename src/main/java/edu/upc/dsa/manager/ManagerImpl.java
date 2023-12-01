@@ -86,7 +86,7 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void register(String username, String password, String name, String surname, String mail, Date birthDate) throws UsernameDoesExist {
+    public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist {
         logger.info("Create user with ID= "+username);
         if(!users.containsKey(username)){
             User newUser = new User(username, password,mail,name,surname,birthDate);

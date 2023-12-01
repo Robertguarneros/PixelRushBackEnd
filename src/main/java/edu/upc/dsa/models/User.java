@@ -13,7 +13,7 @@ public class User {
     String surname;
     String photo; //.png or .jpg <img src="photo.jpg"> (Front-end job)
     String state;
-    Date birthDate;
+    String birthDate;
 
     public void setPointsEarned(int pointsEarned) {
         this.pointsEarned = pointsEarned;
@@ -28,7 +28,7 @@ public class User {
     public User(){}
     // full constructor
     public User(String username, String password, String mail, String name,
-                String surname, Date birthDate) {
+                String surname, String birthDate) {
         this.username = username;
         this.password = password;
         this.mail = mail;
@@ -98,11 +98,11 @@ public class User {
         this.state = state;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 

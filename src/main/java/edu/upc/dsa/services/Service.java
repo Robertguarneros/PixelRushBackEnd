@@ -28,15 +28,15 @@ public class Service {
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist {
         this.m = ManagerImpl.getInstance();
         if(m.size()==0){
-            m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com",new Date(2000,07,12));
+            m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com","02/11/2002");
             m.createMatch("robertoguarneros11");
             m.endMatch("robertoguarneros11");
             m.getUser("robertoguarneros11").setPointsEarned(500);//set 500 points so we can testAddItem
 
-            m.register("titi", "456","Carles","Sanchez","titi@gmail.com",new Date(2000,07,12));
+            m.register("titi", "456","Carles","Sanchez","titi@gmail.com","02/11/2002");
             m.createMatch("titi");
-            m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com",new Date(2000,07,12));
-            m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com",new Date(2000,07,12));
+            m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com","02/11/2002");
+            m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com","02/11/2002");
             m.addObjectToStore("123","Poción", 100, "Poción de salto");
             m.addObjectToStore("222","skin",50,"skin cosmetica");
         }
