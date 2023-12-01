@@ -1,21 +1,23 @@
 package edu.upc.dsa.models.bodies;
 
+import java.util.Date;
+
 public class RegisterCredentials {
     String username;
     String password;
     String name;
     String surname;
     String mail;
-    int age;
+    String birthDate;
     public RegisterCredentials(){}
 
-    public RegisterCredentials(String username, String password, String name, String surname, String mail, int age) {
+    public RegisterCredentials(String username, String password, String name, String surname, String mail, String birthDate) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.mail = mail;
-        this.age = age;
+        this.birthDate = birthDate;
     }
 
     public String getUsername() {
@@ -58,11 +60,11 @@ public class RegisterCredentials {
         this.mail = mail;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

@@ -1,6 +1,7 @@
 package edu.upc.dsa.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -12,7 +13,7 @@ public class User {
     String surname;
     String photo; //.png or .jpg <img src="photo.jpg"> (Front-end job)
     String state;
-    int age;
+    String birthDate;
 
     public void setPointsEarned(int pointsEarned) {
         this.pointsEarned = pointsEarned;
@@ -27,7 +28,7 @@ public class User {
     public User(){}
     // full constructor
     public User(String username, String password, String mail, String name,
-                String surname, int age) {
+                String surname, String birthDate) {
         this.username = username;
         this.password = password;
         this.mail = mail;
@@ -35,7 +36,7 @@ public class User {
         this.surname = surname;
         this.photo = null; //user will put a photo after the register
         this.state = null; //same as photo
-        this.age = age;
+        this.birthDate = birthDate;
         this.matchesPlayed = new ArrayList<>();//create empty lists of matches
         this.ownedObjects = new ArrayList<>();//create empty list of owned objects
         this.pointsEarned = 0;//User starts with 0 points earned
@@ -97,12 +98,12 @@ public class User {
         this.state = state;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public List<Match> getMatchesPlayed() {

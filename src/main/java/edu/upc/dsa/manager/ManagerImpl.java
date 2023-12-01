@@ -7,6 +7,7 @@ import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,10 +86,10 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void register(String username, String password, String name, String surname, String mail, int age) throws UsernameDoesExist {
+    public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist {
         logger.info("Create user with ID= "+username);
         if(!users.containsKey(username)){
-            User newUser = new User(username, password,mail,name,surname,age);
+            User newUser = new User(username, password,mail,name,surname,birthDate);
             users.put(username, newUser); //add new user
             logger.info("User successfully created");
         }
