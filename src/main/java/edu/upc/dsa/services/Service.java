@@ -35,6 +35,7 @@ public class Service {
 
             m.register("titi", "456","Carles","Sanchez","titi@gmail.com","02/11/2002");
             m.createMatch("titi");
+            m.getUser("titi").setPointsEarned(1000);//set 500 points so we can testAddItem
             m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com","02/11/2002");
             m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com","02/11/2002");
             m.addObjectToStore("123","Poción", 100, "Poción de salto");
