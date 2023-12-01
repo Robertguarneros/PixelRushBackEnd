@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('confirmBtnRegister').addEventListener('click', function (event) {
@@ -26,14 +28,14 @@
                 var mailInputField = document.getElementById('miTextbox3');
                 var mail = mailInputField.value.trim();
 
-                var ageInputField = document.getElementById('miTextbox4');
-                var age = parseInt(ageInputField.value.trim());
+                var ageInputField = obtenerFechaSeleccionada();
+                var age = ageInputField.trim();
 
                 var passwordInputField = document.getElementById('miTextbox5');
                 var password = passwordInputField.value.trim();
 
                 // Check if the input fields are not empty
-                if (name !== '' && surname !== '' && userId !== '' && mail !== '' && !isNaN(age) && password !== '') {
+                if (name !== '' && surname !== '' && userId !== '' && mail !== '' && age && password !== '') {
                     var pixelRushUrl = 'http://localhost:8080/dsaApp/pixelRush/registerNewUser';
 
                     // Create a RegisterData object
@@ -60,7 +62,7 @@
                                 // Temporizador para ocultar el alerta después de 5 segundos
                                 setTimeout(function () {
                                     document.getElementById('myAlert3').classList.add('d-none');
-                                }, 4000);
+                                }, 3000);
                             }
                         },
                         error: function (xhr, textStatus, errorThrown) {
@@ -70,7 +72,7 @@
                             // Temporizador para ocultar el alerta después de 5 segundos
                             setTimeout(function () {
                                 document.getElementById('myAlert4').classList.add('d-none');
-                            }, 4000);
+                            }, 3000);
                         }
                     });
                 }
@@ -111,9 +113,7 @@
                                 // Temporizador para ocultar el alerta después de 5 segundos
                                 setTimeout(function () {
                                     window.location.href = 'MainMenu.html?username=' + userLogin;
-                                }, 4000);
-                                // Redirect to MainMenu.html
-
+                                }, 3000);
                             }
                         },
                         error: function (xhr, textStatus, errorThrown) {
@@ -168,8 +168,29 @@
                 <input type="text" class="form-control" id="miTextbox2" placeholder="Write your User ID">
                 <dt>Mail</dt>
                 <input type="text" class="form-control" id="miTextbox3" placeholder="Write your mail">
-                <dt>Age</dt>
-                <input type="text" class="form-control" id="miTextbox4" oninput="validarNumero(this)" placeholder="Write your age">
+                <dt>Birthdate</dt>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="dia">Día</label>
+                        <select class="form-control" id="dia">
+                            <option value="" selected disabled>Select day</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="mes">Mes</label>
+                        <select class="form-control" id="mes">
+                            <option value="" selected disabled>Select month</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="anio">Año</label>
+                        <select class="form-control" id="anio">
+                            <option value="" selected disabled>Select year</option>
+                        </select>
+                    </div>
+                </div>
                 <dt>Password</dt>
                 <input type="password" class="form-control" id="miTextbox5" placeholder="Enter your password">
                 <!-- <dt>Confirm Password</dt>
@@ -228,29 +249,38 @@
     var surnameInput = document.getElementById("miTextbox1");
     var userIDInput = document.getElementById("miTextbox2");
     var mailInput = document.getElementById("miTextbox3");
-    var ageInput = document.getElementById("miTextbox4");
+    var dayInput = document.getElementById("dia");
+    var monthInput = document.getElementById("mes");
+    var yearInput = document.getElementById("anio");
     var passwordInput = document.getElementById("miTextbox5");
+    var password2Input = document.getElementById("miTextbox6");
     var confirmBtn = document.getElementById("confirmBtnRegister");
 
     // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
-    nameInput.addEventListener("input", validarCampos);
-    surnameInput.addEventListener("input", validarCampos);
-    userIDInput.addEventListener("input", validarCampos);
-    mailInput.addEventListener("input", validarCampos);
-    ageInput.addEventListener("input", validarCampos);
-    passwordInput.addEventListener("input", validarCampos);
+    nameInput.addEventListener("input", validarCamposRegistro);
+    surnameInput.addEventListener("input", validarCamposRegistro);
+    userIDInput.addEventListener("input", validarCamposRegistro);
+    mailInput.addEventListener("input", validarCamposRegistro);
+    dayInput.addEventListener("change", validarCamposRegistro);
+    monthInput.addEventListener("change", validarCamposRegistro);
+    yearInput.addEventListener("change", validarCamposRegistro);
+    passwordInput.addEventListener("input", validarCamposRegistro);
+    password2Input.addEventListener("input", validarCamposRegistro);
 
     // Función para validar campos y habilitar/deshabilitar el botón Confirmar
-    function validarCampos() {
-        var camposCompletos =
+    function validarCamposRegistro() {
+        var camposCompletosRegistro =
             nameInput.value !== "" &&
             surnameInput.value !== "" &&
             userIDInput.value !== "" &&
             mailInput.value !== "" &&
-            ageInput.value !== "" &&
+            dayInput.value !== null && dayInput.value !== "" &&
+            monthInput.value !== null && monthInput.value !== "" &&
+            yearInput.value !== null && yearInput.value !== "Selecciona el año" &&
             passwordInput.value !== "";
+            password2Input.value !== "";
 
-        confirmBtn.disabled = !camposCompletos;
+        confirmBtn.disabled = !camposCompletosRegistro;
     }
 </script>
 <script>
@@ -277,6 +307,42 @@
 
         // Actualizar el valor del input con los dígitos filtrados
         input.value = valor;
+    }
+        // Llenar opciones para el día
+        var selectDia = document.getElementById('dia');
+        for (var i = 1; i <= 31; i++) {
+        var option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        selectDia.add(option);
+    }
+
+    // Llenar opciones para el mes
+    var selectMes = document.getElementById('mes');
+    var meses = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    for (var i = 0; i < meses.length; i++) {
+        var option = document.createElement('option');
+        option.value = i + 1;
+        option.text = meses[i];
+        selectMes.add(option);
+    }
+
+        // Llenar opciones para el año
+        var selectAnio = document.getElementById('anio');
+        var anioActual = new Date().getFullYear();
+        for (var i = anioActual; i >= 1900; i--) {
+        var option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        selectAnio.add(option);
+    }
+    function obtenerFechaSeleccionada() {
+        // Obtener valores seleccionados de los desplegables
+        var diaSeleccionado = document.getElementById('dia').value;
+        var mesSeleccionado = document.getElementById('mes').value;
+        var anioSeleccionado = document.getElementById('anio').value;
+        // Crear la cadena en el formato "dia/mes/anio"
+        return diaSeleccionado + '/' + mesSeleccionado + '/' + anioSeleccionado;
     }
 </script>
 
