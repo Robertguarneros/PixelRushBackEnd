@@ -94,7 +94,7 @@ public class ManagerImpl implements Manager{
             logger.info("User successfully created");
         }
         else {logger.warn("this username already exists");
-        throw new UsernameDoesExist("This Username does exist");}
+            throw new UsernameDoesExist("This Username does exist");}
     }
 
     @Override
@@ -119,7 +119,7 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist {
+    public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist,NotEnoughPoints, AlreadyOwned {
         User user = users.get(username);
         if(user == null){
             logger.warn("User does not exist");
@@ -128,8 +128,15 @@ public class ManagerImpl implements Manager{
             logger.warn("ObjectID does not exist");
             throw new ObjectIDDoesNotExist("ObjectID does not exist");
         } else {
-            user.addNewOwnedObject(objectID);
-            logger.info("The item:"+objectID+" was added into the User: "+username);
+            int response = user.addNewOwnedObject(objectID);
+            if(response==1){
+                logger.info("The item:"+objectID+" was added into the User: "+username);
+            }else if(response == -2){
+                throw new NotEnoughPoints("Not Enough Points");
+            }else if(response == -1){
+                throw new AlreadyOwned("Already Owned");
+            }
+
         }
     }
 

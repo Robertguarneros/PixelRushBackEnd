@@ -83,7 +83,7 @@ public class ManagerImplTest {
         Assert.assertThrows(IncorrectPassword.class,()->this.m.login("robertoguarneros11","12sdaf3"));
     }
     @Test
-    public void testAddItemToUser() throws UsernameDoesNotExistException, ObjectIDDoesNotExist {//test to verify if we can add items to a user list.
+    public void testAddItemToUser() throws UsernameDoesNotExistException, ObjectIDDoesNotExist,AlreadyOwned,NotEnoughPoints {//test to verify if we can add items to a user list.
         //We first need to add points to the user so that it can purchase.
         this.m.getUser("robertoguarneros11").setPointsEarned(500);
         Assert.assertEquals(500,this.m.getUser("robertoguarneros11").getPointsEarned());
@@ -98,6 +98,8 @@ public class ManagerImplTest {
         //Try exceptions
         Assert.assertThrows(UsernameDoesNotExistException.class,()->this.m.addItemToUser("asdasdfa",m.getObject("123")));
         Assert.assertThrows(ObjectIDDoesNotExist.class,()->this.m.addItemToUser("robertoguarneros11",m.getObject("asadf")));
+        Assert.assertThrows(AlreadyOwned.class,()->this.m.addItemToUser("robertoguarneros11",m.getObject("123")));
+        Assert.assertThrows(NotEnoughPoints.class,()->this.m.addItemToUser("titi",m.getObject("123")));
     }
     @Test
     public void testCreateMatch() throws UsernameDoesNotExistException, UsernameIsInMatchException{//test to create a new match, we need to implement a getMatch in the ManagerImpl in order to be able to first see if the user has a current match or not.
@@ -143,7 +145,7 @@ public class ManagerImplTest {
     public void testNextLevel() throws UsernameDoesNotExistException, UsernameisNotInMatchException, UsernameIsInMatchException {
         //Create a match to try it.
         this.m.createMatch("robertoguarneros11");
-       //Test changing level from 1 to 2
+        //Test changing level from 1 to 2
         this.m.nextLevel("robertoguarneros11",100);
         Assert.assertEquals(100,this.m.getMatch("robertoguarneros11").getTotalPoints());
         Assert.assertEquals(2,this.m.getMatch("robertoguarneros11").getCurrentLVL());
