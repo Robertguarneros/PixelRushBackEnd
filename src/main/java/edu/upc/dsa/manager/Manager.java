@@ -17,7 +17,7 @@ public interface Manager {
     public List<Match> getPlayedMatches(String username);
     public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist;
     public boolean login (String username, String password) throws UsernameDoesNotExistException, IncorrectPassword;
-    public void addItemToUser(String username, StoreObject item) throws UsernameDoesNotExistException, ObjectIDDoesNotExist; //add ObjectID to users list of objects
+    public void addItemToUser(String username, StoreObject item) throws UsernameDoesNotExistException, ObjectIDDoesNotExist,NotEnoughPoints, AlreadyOwned; //add ObjectID to users list of objects
     public void createMatch(String username) throws UsernameDoesNotExistException, UsernameIsInMatchException;
     public int getLevelFromMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException;
     public int getMatchTotalPoints(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException;

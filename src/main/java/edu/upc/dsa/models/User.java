@@ -140,12 +140,17 @@ public class User {
         if (newObject == null){
             ownedObjects = new ArrayList<>();
         }
-
+        // Check if the item ID is already in ownedObjects
+        for (StoreObject ownedObject : ownedObjects) {
+            if (ownedObject.getObjectID().equals(newObject.getObjectID())) {
+                return -1; // Object with the same ID is already owned
+            }
+        }
         if(pointsEarned> newObject.getPrice()){
             ownedObjects.add(newObject);
             return 1;
         }else{
-            return -1;
+            return -2;
         }
     }
     public int getNumOfMatches(){
