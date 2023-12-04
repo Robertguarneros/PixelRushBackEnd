@@ -198,8 +198,8 @@ public class Service {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Item added successfully"),
             @ApiResponse(code = 404, message = "Username does not exist or objectID does not exist"),
-            @ApiResponse(code = 501, message = "Already Owned"),
-            @ApiResponse(code = 502, message = "Not enough Points")
+            @ApiResponse(code = 550, message = "Already Owned"),
+            @ApiResponse(code = 551, message = "Not enough Points")
     })
     @Path("/addItemToUser/{username}/{objectID}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -209,9 +209,9 @@ public class Service {
         } catch(UsernameDoesNotExistException | ObjectIDDoesNotExist e){
             return Response.status(404).build();
         }catch (AlreadyOwned e){
-            return Response.status(501).build();
+            return Response.status(550).build();
         }catch (NotEnoughPoints e){
-            return Response.status(502).build();
+            return Response.status(551).build();
         }
         return Response.status(201).build();
     }
