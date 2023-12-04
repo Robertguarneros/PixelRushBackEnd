@@ -12,6 +12,7 @@
 
     <script>
         var storedUsername = sessionStorage.getItem('username');
+
         $(document).ready(function() {
             var resultadosTabla = $('#resultados');
 
@@ -38,10 +39,12 @@
                     });
                 },
             });
+
             resultadosTabla.on('click', '#btnComprar', function() {
                 var fila = $(this).closest('tr');
                 var id = fila.find('td:first-child').text(); // Obtener el ID del producto
                 var username = storedUsername;
+                var botonComprar = $(this);
 
                 // Realizar la solicitud PUT
                 $.ajax({
@@ -52,7 +55,7 @@
                         if (status === 'success') {
                             // Puedes realizar acciones adicionales si la solicitud tiene éxito
                             alert('Item added successfully!');
-                            validarCampos($(this));
+                            ocultarBoton(botonComprar);
                         }
                     },
                     error: function(xhr, textStatus, errorThrown) {
@@ -66,10 +69,8 @@
                 });
             });
         });
-        function validarCampos(button) {
-            // Obtener la fila del botón
-            var fila = $(button).closest('tr');
-            button.disabled = true;
+        function ocultarBoton(button) {
+            $(button).hide();
         }
         // Función para validar campos y habilitar/deshabilitar el botón Agregar
         function validarCampos() {
