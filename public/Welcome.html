@@ -45,7 +45,7 @@
                         name: name,
                         surname: surname,
                         mail: mail,
-                        age: age
+                        birthDate: age
                     };
 
                     // Make a POST request to the register API with the RegisterData object
@@ -193,10 +193,10 @@
                 </div>
                 <dt>Password</dt>
                 <input type="password" class="form-control" id="miTextbox5" placeholder="Enter your password">
-                <!-- <dt>Confirm Password</dt>
-                <input type="password" class="form-control" id="miTextbox6" placeholder="Enter your password">-->
+                <dt>Confirm Password</dt>
+                <input type="password" class="form-control" id="miTextbox6" placeholder="Confirm your password">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="confirmBtnRegister" data-bs-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-success" id="confirmBtnRegister" data-bs-dismiss="modal" disabled>Confirm</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -244,6 +244,14 @@
     <strong>Error!</strong> Register failed. Please check your credentials.
 </div>
 <script>
+    function validarContrasenas() {
+        var passwordInput = document.getElementById("miTextbox5").value;
+        var password2Input = document.getElementById("miTextbox6").value;
+
+        var contrasenasIguales = passwordInput == password2Input;
+
+        return contrasenasIguales;
+    }
     // Obtén referencias a los campos de texto y al botón Confirmar
     var nameInput = document.getElementById("miTextbox0");
     var surnameInput = document.getElementById("miTextbox1");
@@ -253,7 +261,7 @@
     var monthInput = document.getElementById("mes");
     var yearInput = document.getElementById("anio");
     var passwordInput = document.getElementById("miTextbox5");
-    var password2Input = document.getElementById("miTextbox6");
+    var passwordconfInput = document.getElementById("miTextbox6");
     var confirmBtn = document.getElementById("confirmBtnRegister");
 
     // Agrega un evento de entrada a cada campo de texto para verificar cuando se escriba
@@ -265,7 +273,7 @@
     monthInput.addEventListener("change", validarCamposRegistro);
     yearInput.addEventListener("change", validarCamposRegistro);
     passwordInput.addEventListener("input", validarCamposRegistro);
-    password2Input.addEventListener("input", validarCamposRegistro);
+    passwordconfInput.addEventListener("input", validarCamposRegistro);
 
     // Función para validar campos y habilitar/deshabilitar el botón Confirmar
     function validarCamposRegistro() {
@@ -276,9 +284,11 @@
             mailInput.value !== "" &&
             dayInput.value !== null && dayInput.value !== "" &&
             monthInput.value !== null && monthInput.value !== "" &&
-            yearInput.value !== null && yearInput.value !== "Selecciona el año" &&
-            passwordInput.value !== "";
-            password2Input.value !== "";
+            yearInput.value !== null && yearInput.value !== "" &&
+            passwordconfInput.value !== "" &&
+            passwordInput.value !== "" &&
+            validarContrasenas();
+
 
         confirmBtn.disabled = !camposCompletosRegistro;
     }

@@ -23,9 +23,10 @@
 
                     // Iterar sobre la lista de objetos y agregar cada uno a la tabla
                     data.forEach(function(objeto) {
+
                         resultadosTabla.append(`
               <tr>
-                <td>${objeto.objectID || 'No proporcionado'}</td>
+                <td><strong>${objeto.objectID || 'No proporcionado'}</strong></td>
                 <td>${objeto.articleName || 'No proporcionado'}</td>
                 <td><img src="${objeto.articlePhoto || 'No proporcionado'}" alt="Foto del objeto" width="100"></td>
                 <td>${objeto.description || 'No proporcionado'}</td>
