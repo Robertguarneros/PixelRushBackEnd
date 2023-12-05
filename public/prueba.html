@@ -1,67 +1,55 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <title>Seleccionar Fecha de Nacimiento</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-</head>
-<body>
-
-<div class="container mt-5">
-    <h1>Fecha de Nacimiento</h1>
-
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="dia">Día</label>
-            <select class="form-control" id="dia"></select>
-        </div>
-
-        <div class="form-group col-md-4">
-            <label for="mes">Mes</label>
-            <select class="form-control" id="mes"></select>
-        </div>
-
-        <div class="form-group col-md-4">
-            <label for="anio">Año</label>
-            <select class="form-control" id="anio"></select>
-        </div>
-    </div>
     <script>
-        // Llenar opciones para el día
-        var selectDia = document.getElementById('dia');
-        for (var i = 1; i <= 31; i++) {
-            var option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            selectDia.add(option);
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#btnAgregar').on('click', function(event) {
+                event.preventDefault();
+                // Get the values from the input fields
+                var productInputField = document.getElementById('nuevoProducto');
+                var product = productInputField.value.trim();
 
-        // Llenar opciones para el mes
-        var selectMes = document.getElementById('mes');
-        var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        for (var i = 0; i < meses.length; i++) {
-            var option = document.createElement('option');
-            option.value = i + 1;
-            option.text = meses[i];
-            selectMes.add(option);
-        }
+                var descriptionIdInputField = document.getElementById('nuevaDescripcion');
+                var description = descriptionIdInputField.value.trim();
 
-        // Llenar opciones para el año
-        var selectAnio = document.getElementById('anio');
-        var anioActual = new Date().getFullYear();
-        for (var i = anioActual; i >= 1900; i--) {
-            var option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            selectAnio.add(option);
-        }
+                var priceInputField = document.getElementById('nuevoPrecio');
+                var price = priceInputField.value.trim();
+
+                var photoInputField = document.getElementById('nuevaFoto');
+                var photo = photoInputField.value.trim();
+
+                if (id !== '' && product !== '' && description !== '' && price !== '' && photo !== '') {
+                    var pixelRushUrl = 'http://localhost:8080/dsaApp/pixelRush/addObjectToStore';
+                    // Create a AddObjectData object
+                    var AddObjectData = {
+                        id: id,
+                        product: product,
+                        price: price,
+                        description: description,
+                        photo: photo,
+                    };
+                }
+                // Make a POST request to the register API with the RegisterData object
+                $.ajax({
+                    type: 'POST',
+                    url: pixelRushUrl,
+                    contentType: 'application/json',
+                    data: JSON.stringify(AddObjectData),
+                    success: function (data, status) {
+                        if (status === 'success') {
+                            // Display the success message
+                            alert('Item added successfully!');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // Manejar el error de la solicitud
+                        if (xhr.status === 404) {
+                            alert('objectID already exists');
+                        } else {
+                            alert('Error during the request');
+                        }
+                    }
+                });
+            })
+        })
     </script>
-</div>
-</body>
-</html>
+
 
