@@ -1,9 +1,7 @@
 package edu.upc.dsa.models;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 public class User {
     String username;

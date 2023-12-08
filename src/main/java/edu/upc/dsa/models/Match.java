@@ -3,7 +3,8 @@ package edu.upc.dsa.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Match {
+public class
+Match {
     String username;
     int totalPoints;
     int currentLVL;

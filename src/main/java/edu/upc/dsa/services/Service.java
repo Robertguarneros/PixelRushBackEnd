@@ -17,7 +17,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Date;
 
 @Api(value = "/pixelRush", description = "Endpoint to Pixel Rush Service")
 @Path("/pixelRush")

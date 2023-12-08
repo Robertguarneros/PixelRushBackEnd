@@ -7,7 +7,6 @@ import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
     HashMap<String,User> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
-    HashMap<String,Match> activeMatches; // Key = username
+    HashMap<String, Match> activeMatches; // Key = username
 
 
     private static Manager instance;

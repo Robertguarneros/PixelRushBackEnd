@@ -5,7 +5,6 @@ import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.Match;
 
-import java.util.Date;
 import java.util.List;
 
 public interface Manager {
