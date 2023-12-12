@@ -14,4 +14,9 @@ public class ObjectHelper {
         for (Field f: fields) sFields[i++]=f.getName();
         return sFields;
     }
+    public String getMethodsName(String name){
+        return name.substring(0);
+    }
+
+
 }
