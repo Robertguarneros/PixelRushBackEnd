@@ -9,5 +9,6 @@ public interface Session<E> {
 
     void save(Object entity, String primaryKey) throws SQLException;
     void close();
+    Object get(Object value, String primaryKey, Object entity);
 
 }

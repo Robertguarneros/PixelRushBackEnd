@@ -38,4 +38,44 @@ public class SessionImpl {
         }
     }
 
+    public Object get(Object entity, String primaryKey, Object value){
+        String selectQuery = QueryHelper.createQuerySELECT(entity, primaryKey);
+        ResultSet resultSet;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = conn.prepareStatement(selectQuery);
+            preparedStatement.setObject(1,value);
+            resultSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData setMetaData = resultSet.getMetaData();
+            int nColunsm = setMetaData.getColumnCount();
+            Object o = entity.getClass().newInstance();
+            Object valueColumn = null;
+
+            while(resultSet.next()){
+                for (int i = 1; i <= nColunsm; i++) {
+                    String nameColumn = setMetaData.getColumnName(i);
+                    ObjectHelper.setter(o, nameColumn, resultSet.getObject(i));
+                    System.out.println((nameColumn));
+                    System.out.println((resultSet.getObject(i)));
+                    valueColumn = resultSet.getObject(i);
+                }
+            }
+            return o;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (InstantiationException | IllegalAccessException e){
+            throw new RuntimeException(e);
+        }finally {
+            try{
+                if (preparedStatement != null){
+                    preparedStatement.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return  null;
+        }
+    }
 }

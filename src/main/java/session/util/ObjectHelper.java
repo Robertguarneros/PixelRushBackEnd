@@ -2,6 +2,8 @@ package session.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
 
 public class ObjectHelper {
 
@@ -15,12 +17,13 @@ public class ObjectHelper {
         for (Field f: fields) sFields[i++]=f.getName();
         return sFields;
     }
-    public String getMethodsName(String name){
-        return name;
+
+    public String getMethodsName(String property){
+        return property.substring(0,1).toUpperCase()+property.substring(1);
     }
 
-    public static Object getter (Object object, String name){
-        String nameUppercase = name.substring(0,1).toUpperCase()+name.substring(1);
+    public static Object getter (Object object, String property){
+        String nameUppercase = property.substring(0,1).toUpperCase()+property.substring(1);
         String getName= "get"+nameUppercase;
         try {
             Method method = object.getClass().getDeclaredMethod(getName);
@@ -32,6 +35,16 @@ public class ObjectHelper {
         }catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void setter(Object object, String property, Object value){
+        try {
+            String setterName = "set" + property.substring(0, 1).toUpperCase() + property.substring(1);
+            Method setterMethod = object.getClass().getMethod(setterName, value.getClass());
+            setterMethod.invoke(object, value);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
