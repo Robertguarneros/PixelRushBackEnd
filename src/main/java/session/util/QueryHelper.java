@@ -1,17 +1,20 @@
 package session.util;
 
 public class QueryHelper {
-    public static String createQueryINSERT(Object entity) {
+    public static String createQueryINSERT(Object entity,String primaryKey) {
 
         StringBuffer stringBuffer = new StringBuffer("INSERT INTO ");
         stringBuffer.append(entity.getClass().getSimpleName()).append(" (");
         String [] fields = ObjectHelper.getFields(entity);
 
         for (String field: fields) {
-            stringBuffer.append(field).append(", ");
+            if (!field.equalsIgnoreCase(primaryKey)){
+                stringBuffer.append(field).append(", ");}
         }
+        stringBuffer.setLength(stringBuffer.length()-2);
         stringBuffer.append(") VALUES (?");
         for (String field: fields) {
+            if (!field.equalsIgnoreCase(primaryKey))
             stringBuffer.append(", ?");
         }
         stringBuffer.append(")");
