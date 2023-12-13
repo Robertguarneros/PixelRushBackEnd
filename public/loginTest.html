@@ -11,47 +11,47 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-          document.getElementById('loginBtn').addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent form submission (if not needed)
+            document.getElementById('loginBtn').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent form submission (if not needed)
 
-            // Get the username and password from the input fields
-            var usernameInputField = document.getElementById('username_input');
-            var username = usernameInputField.value.trim(); // Trim to remove extra spaces
-            var passwordInputField = document.getElementById('password_input');
-            var password = passwordInputField.value.trim(); // Trim to remove extra spaces
+                // Get the username and password from the input fields
+                var usernameInputField = document.getElementById('username_input');
+                var username = usernameInputField.value.trim(); // Trim to remove extra spaces
+                var passwordInputField = document.getElementById('password_input');
+                var password = passwordInputField.value.trim(); // Trim to remove extra spaces
 
-            // Check if the input fields are not empty
-            if (username !== '' && password !== '') {
-              var pixelRushUrl = 'http://localhost:8080/dsaApp/pixelRush/login';
+                // Check if the input fields are not empty
+                if (username !== '' && password !== '') {
+                    var pixelRushUrl = 'http://localhost:8080/dsaApp/pixelRush/login';
 
-              // Create a LoginCredentials object
-              var loginCredentials = {
-                username: username,
-                password: password
-              };
+                    // Create a LoginCredentials object
+                    var loginCredentials = {
+                        username: username,
+                        password: password
+                    };
 
-              // Make a POST request to the login API with the LoginCredentials object
-              $.ajax({
-                type: 'POST',
-                url: pixelRushUrl,
-                contentType: 'application/json',
-                data: JSON.stringify(loginCredentials),
-                success: function (data, status) {
-                  if (status === 'success') {
-                    // Access the 'login' property from the API response
-                    var userLogin = data.login;
+                    // Make a POST request to the login API with the LoginCredentials object
+                    $.ajax({
+                        type: 'POST',
+                        url: pixelRushUrl,
+                        contentType: 'application/json',
+                        data: JSON.stringify(loginCredentials),
+                        success: function (data, status) {
+                            if (status === 'success') {
+                                // Access the 'login' property from the API response
+                                var userLogin = data.login;
 
-                    // Display the success message
-                    alert('Login successful! Welcome, ' + userLogin);
-                  }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                  // Handle login failure
-                  alert('Login failed. Please check your credentials.');
+                                // Display the success message
+                                alert('Login successful! Welcome, ' + userLogin);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Handle login failure
+                            alert('Login failed. Please check your credentials.');
+                        }
+                    });
                 }
-              });
-            }
-          });
+            });
         });
 
     </script>

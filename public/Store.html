@@ -6,15 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <script>
+        function ocultarBoton(button) {
+            $(button).hide();
+        }
+        var storedUsername = sessionStorage.getItem('username');
         $(document).ready(function() {
             var resultadosTabla = $('#resultados');
 
             $.ajax({
-                url: 'http://147.83.7.203:80/dsaApp/pixelRush/getObjectListFromStore',
+                url: 'http://localhost:8080/dsaApp/pixelRush/getObjectListFromStore',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -22,17 +26,53 @@
 
                     // Iterar sobre la lista de objetos y agregar cada uno a la tabla
                     data.forEach(function(objeto) {
+
                         resultadosTabla.append(`
               <tr>
-                <td>${objeto.objectID || 'No proporcionado'}</td>
+                <td><strong>${objeto.objectID || 'No proporcionado'}</strong></td>
                 <td>${objeto.articleName || 'No proporcionado'}</td>
                 <td><img src="${objeto.articlePhoto || 'No proporcionado'}" alt="Foto del objeto" width="100"></td>
                 <td>${objeto.description || 'No proporcionado'}</td>
                 <td>${objeto.price || 'No proporcionado'}</td>
+                <td><button type="button" class="btn btn-success" id="btnComprar">Buy</button></td>
               </tr>
             `);
                     });
                 },
+            });
+
+            resultadosTabla.on('click', '#btnComprar', function() {
+                var fila = $(this).closest('tr');
+                var id = fila.find('td:first-child').text(); // Obtener el ID del producto
+                var username = storedUsername;
+                var botonComprar = $(this);
+
+                // Realizar la solicitud PUT
+                $.ajax({
+                    type: 'PUT',
+                    url: 'http://localhost:8080/dsaApp/pixelRush/addItemToUser/' + username + '/' + id,
+                    contentType: 'application/json',
+                    success: function(data, status) {
+                        if (status === 'success') {
+                            ocultarBoton(botonComprar);
+                            alert('Product Pursarched!');
+
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // Manejar el error de la solicitud
+                        if (xhr.status === 404) {
+                            alert('Username does not exist or objectID does not exist');
+                        } else if (xhr.status === 550) {
+                            ocultarBoton(botonComprar);
+                            alert('Product Owned');
+                        } else if (xhr.status === 551) {
+                            alert('Not enough points');
+                        } else {
+                            alert('Error during the request');
+                        }
+                    }
+                });
             });
         });
         // Función para validar campos y habilitar/deshabilitar el botón Agregar
@@ -58,15 +98,45 @@
                 alert("Adjunta una imagen antes de agregar");
                 return;
             }
-
-            // Crea una nueva fila y agrega celdas con la información proporcionada
             var tabla = document.getElementById("miTabla").getElementsByTagName('tbody')[0];
+            var storeObject = {
+
+                objectID: tabla.rows.length, // Asignar un valor único al objectID (cambiar según tus necesidades)
+                articleName: nuevoProducto,
+                price: nuevoPrecio,
+                description: nuevaDescripcion
+            };
+
+            // Hacer la solicitud POST a la API
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/dsaApp/pixelRush/addObjectToStore',
+                contentType: 'application/json',
+                data: JSON.stringify(storeObject),
+                success: function (data, status) {
+                    if (status === 'success') {
+                        // Display the success message
+                        alert('Item added successfully!');
+                        // Puedes realizar otras acciones aquí si es necesario
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Manejar el error de la solicitud
+                    if (xhr.status === 404) {
+                        alert('objectID already exists');
+                    } else {
+                        alert('Error during the request');
+                    }
+                }
+            });
+            // Crea una nueva fila y agrega celdas con la información proporcionada
             var nuevaFila = tabla.insertRow(tabla.rows.length);
             var celdaID = nuevaFila.insertCell(0);
             var celdaProducto = nuevaFila.insertCell(1);
             var celdaFoto = nuevaFila.insertCell(2);
             var celdaDescripcion = nuevaFila.insertCell(3);
             var celdaPrecio = nuevaFila.insertCell(4);
+            var celdaComprar = nuevaFila.insertCell(5);
 
             // Asigna valores a las celdas
             celdaID.innerText = tabla.rows.length;
@@ -74,22 +144,24 @@
             celdaFoto.innerHTML = `<img src="${URL.createObjectURL(nuevaFoto)}" alt="Imagen" class="nuevaFotoInput">`;
             celdaDescripcion.innerText = nuevaDescripcion;
             celdaPrecio.innerText = nuevoPrecio;
+            celdaComprar.innerHTML = `<button type="button" class="btn btn-success" id="btnComprar">Buy</button>`;
 
             // Vacía los campos de texto después de agregar el producto
             document.getElementById("nuevoProducto").value = "";
             document.getElementById("nuevaDescripcion").value = "";
             document.getElementById("nuevoPrecio").value = "";
             document.getElementById("nuevaFoto").value = "";
+            document.getElementById("btnAgregar").disabled = true;
         }
-    function Agradecimientos() {
-    window.location.href = "Credits.html";
-    }
-    function MainMenu() {
-    window.location.href = "MainMenu.html";
-    }
-    function UsuarioDatos() {
-        window.location.href = "User.html";
-    }
+        function Agradecimientos() {
+            window.location.href = "Credits.html";
+        }
+        function MainMenu() {
+            window.location.href = "MainMenu.html";
+        }
+        function UsuarioDatos() {
+            window.location.href = "User.html";
+        }
     </script>
 
     <style>
@@ -101,7 +173,7 @@
 
         td,
         th {
-            border: 1px solid #ddd;
+            border: none; /* Eliminar bordes */
             padding: 8px;
             text-align: left;
         }
@@ -143,7 +215,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-light navbar-light">
+<nav class="navbar navbar-expand-md bg-light navbar-light">
     <div class="container-fluid">
         <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
             <span class="navbar-toggler-icon"></span> </button>
@@ -180,40 +252,40 @@
             <th>Foto</th>
             <th>Descripción</th>
             <th>Precio</th>
+            <th>Buy?¿?¿?¿?¿</th>
         </tr>
         </thead>
         <tbody id ="resultados">
-
         </tbody>
     </table>
 
     <!-- Botón para abrir el modal -->
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#miModal">Agregar Nuevo Producto</button>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#miModal">Add New Product</button>
 
     <!-- Modal con campos de texto y carga de archivo -->
     <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="miModalLabel">Agregar Nuevo Producto</h5>
+                    <h5 class="modal-title" id="miModalLabel">Add Product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="nuevoProducto" class="form-label">Nuevo Producto:</label>
-                    <input type="text" class="form-control" id="nuevoProducto" oninput="validarCampos()">
+                    <label for="nuevoProducto" class="form-label">New Product:</label>
+                    <input type="text" class="form-control" id="nuevoProducto" placeholder="Name Product" oninput="validarCampos()">
 
-                    <label for="nuevaDescripcion" class="form-label">Descripción:</label>
-                    <input type="text" class="form-control" id="nuevaDescripcion" oninput="validarCampos()">
+                    <label for="nuevaDescripcion" class="form-label">Description:</label>
+                    <input type="text" class="form-control" id="nuevaDescripcion" placeholder="Write the Description" oninput="validarCampos()">
 
-                    <label for="nuevoPrecio" class="form-label">Precio:</label>
-                    <input type="text" class="form-control" id="nuevoPrecio" oninput="validarCampos()">
+                    <label for="nuevoPrecio" class="form-label">Price:</label>
+                    <input type="text" class="form-control" id="nuevoPrecio" placeholder="Write the Price" oninput="validarCampos()">
 
-                    <label for="nuevaFoto" class="form-label">Foto:</label>
+                    <label for="nuevaFoto" class="form-label">Photo:</label>
                     <input type="file" class="form-control nuevaFotoInput" id="nuevaFoto" oninput="validarCampos()">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="btnAgregar" disabled onclick="agregarProducto()">Agregar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="btnAgregar" disabled onclick="agregarProducto()">Add</button>
                 </div>
             </div>
         </div>
