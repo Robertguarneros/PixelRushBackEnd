@@ -104,23 +104,28 @@ public class ManagerImpl implements Manager{
 
     @Override
     public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
+        Session session = null;
         User user = users.get(username);
         logger.info("username: "+user.getUsername());
         logger.info("Password: "+user.getPassword());
-
-        if (user != null && user.getPassword().equals(password)){
-            logger.info("Welcome User:"+username);
-            return true;
+        try{
+            User user2 = (User) session.get(user, "username", username);
+            if (user2 != null && user.getPassword().equals(password)){
+                logger.info("Welcome User:"+username);
+                return true;
+            }
+            if(!user.getPassword().equals(password)){
+                logger.warn("Username or Password was incorrect");
+                throw new IncorrectPassword("Username or Password was incorrect");
+            }
+            if(user == null){
+                logger.warn("Username or Password was incorrect");
+                throw new UsernameDoesNotExistException("Username or Password was incorrect");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
         }
-        if(!user.getPassword().equals(password)){
-            logger.warn("Username or Password was incorrect");
-            throw new IncorrectPassword("Username or Password was incorrect");
-        }
-        if (user == null){
-            logger.warn("Username or Password was incorrect");
-            throw new UsernameDoesNotExistException("Username or Password was incorrect");
-        }
-        return false;
     }
 
     @Override
