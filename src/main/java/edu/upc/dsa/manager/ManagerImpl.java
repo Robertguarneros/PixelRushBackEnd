@@ -91,7 +91,7 @@ public class ManagerImpl implements Manager{
     @Override
     public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist {
         Session session = null;
-        if(username != null){
+        if(users.containsKey(username)){
             throw new UsernameDoesExist("This username already exist");
         }
         User user = new User(username,password,name,surname,mail,birthDate);
@@ -126,6 +126,7 @@ public class ManagerImpl implements Manager{
             e.printStackTrace();
             return false;
         }
+        return false;
     }
 
     @Override
@@ -146,7 +147,6 @@ public class ManagerImpl implements Manager{
             }else if(response == -1){
                 throw new AlreadyOwned("Already Owned");
             }
-
         }
     }
 
@@ -250,5 +250,4 @@ public class ManagerImpl implements Manager{
         }
         else logger.warn("this object already exists");
     }
-
 }
