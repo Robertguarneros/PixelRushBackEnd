@@ -6,10 +6,10 @@ import session.util.QueryHelper;
 import java.sql.*;
 import java.sql.Connection;
 
-public class SessionImpl {
+public class SessionImpl implements Session{
     private final Connection conn;
 
-    public SessionImpl(Connection connnection){this.conn = connnection;}
+    public SessionImpl(Connection conn){this.conn = conn;}
 
     public void save(Object entity, String primaryKey) throws SQLException{
         String insertQuery = QueryHelper.createQueryINSERT(entity, primaryKey);
