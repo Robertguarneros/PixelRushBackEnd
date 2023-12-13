@@ -5,7 +5,11 @@ import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.Match;
 import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
+import session.Session;
+import session.SessionImpl;
+import session.util.QueryHelper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,14 +90,16 @@ public class ManagerImpl implements Manager{
 
     @Override
     public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist {
-        logger.info("Create user with ID= "+username);
-        if(!users.containsKey(username)){
-            User newUser = new User(username, password,mail,name,surname,birthDate);
-            users.put(username, newUser); //add new user
-            logger.info("User successfully created");
+        Session session = null;
+        if(username != null){
+            throw new UsernameDoesExist("This username already exist");
         }
-        else {logger.warn("this username already exists");
-            throw new UsernameDoesExist("This Username does exist");}
+        User user = new User(username,password,name,surname,mail,birthDate);
+        try{
+            session.save(user, username); //username is the primaryKey value
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,4 +1,5 @@
 package session;
+import edu.upc.dsa.models.User;
 import session.util.ObjectHelper;
 import session.util.QueryHelper;
 
@@ -30,6 +31,7 @@ public class SessionImpl {
         }
 
     }
+
     public void close(){
         try {
             this.conn.close();
@@ -63,18 +65,29 @@ public class SessionImpl {
                 }
             }
             return o;
+
         }catch (SQLException e){
+
             e.printStackTrace();
+
         }catch (InstantiationException | IllegalAccessException e){
+
             throw new RuntimeException(e);
+
         }finally {
+
             try{
                 if (preparedStatement != null){
+
                     preparedStatement.close();
+
                 }
             }catch (SQLException e){
+
                 e.printStackTrace();
+
             }
+
             return  null;
         }
     }
