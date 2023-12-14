@@ -1,5 +1,7 @@
 package edu.upc.dsa.models;
 
+import java.util.ArrayList;
+
 public class OwnedObjects {
     String object;
 

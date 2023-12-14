@@ -8,13 +8,15 @@ public class QueryHelper {
         String [] fields = ObjectHelper.getFields(entity);
 
         for (String field: fields) {
-            if (!field.equalsIgnoreCase(primaryKey)){
+            if (!field.equalsIgnoreCase(primaryKey)&& (!field.equals("matchesPlayed"))
+            && (!field.equals("ownedObjects"))){
                 stringBuffer.append(field).append(", ");}
         }
         stringBuffer.setLength(stringBuffer.length()-2);
         stringBuffer.append(") VALUES (?");
         for (String field: fields) {
-            if (!field.equalsIgnoreCase(primaryKey))
+            if (!field.equalsIgnoreCase(primaryKey) && (!field.equals("matchesPlayed"))
+                    && (!field.equals("ownedObjects")))
             stringBuffer.append(", ?");
         }
         stringBuffer.append(")");
