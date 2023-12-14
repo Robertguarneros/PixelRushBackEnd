@@ -106,7 +106,6 @@
                             if (status === 'success') {
                                 // Access the 'login' property from the API response
                                 var userLogin = username;
-
                                 // Guarda el nombre de usuario en sessionStorage
                                 sessionStorage.setItem('username', userLogin);
 
@@ -321,9 +320,9 @@
         // Actualizar el valor del input con los dígitos filtrados
         input.value = valor;
     }
-        // Llenar opciones para el día
-        var selectDia = document.getElementById('dia');
-        for (var i = 1; i <= 31; i++) {
+    // Llenar opciones para el día
+    var selectDia = document.getElementById('dia');
+    for (var i = 1; i <= 31; i++) {
         var option = document.createElement('option');
         option.value = i;
         option.text = i;
@@ -340,10 +339,10 @@
         selectMes.add(option);
     }
 
-        // Llenar opciones para el año
-        var selectAnio = document.getElementById('anio');
-        var anioActual = new Date().getFullYear();
-        for (var i = anioActual; i >= 1900; i--) {
+    // Llenar opciones para el año
+    var selectAnio = document.getElementById('anio');
+    var anioActual = new Date().getFullYear();
+    for (var i = anioActual; i >= 1900; i--) {
         var option = document.createElement('option');
         option.value = i;
         option.text = i;

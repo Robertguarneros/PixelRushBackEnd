@@ -15,6 +15,12 @@
         }
 
         var storedUsername = sessionStorage.getItem('username');
+
+        // Verifica si el usuario ha iniciado sesión
+        if (storedUsername == null) {
+            // Redirige a la página de inicio de sesión si no ha iniciado sesión
+            window.location.href = "Welcome.html";
+        }
         $(document).ready(function() {
             var resultadosTabla = $('#resultados');
 
