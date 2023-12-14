@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import session.FactorySession;
 
 public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
@@ -96,37 +97,44 @@ public class ManagerImpl implements Manager{
         }
         User user = new User(username,password,name,surname,mail,birthDate);
         try{
+            session = FactorySession.openSession();
             session.save(user, username); //username is the primaryKey value
         }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            session.close();
         }
     }
 
     @Override
     public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
+        boolean loggedIn = false;
         Session session = null;
         User user = users.get(username);
         logger.info("username: "+user.getUsername());
         logger.info("Password: "+user.getPassword());
         try{
+            session = FactorySession.openSession();
             User user2 = (User) session.get(user, "username", username);
             if (user2 != null && user.getPassword().equals(password)){
                 logger.info("Welcome User:"+username);
-                return true;
-            }
-            if(!user.getPassword().equals(password)){
+                loggedIn = true;
+            }else if(!user.getPassword().equals(password)){
+                loggedIn = false;
                 logger.warn("Username or Password was incorrect");
                 throw new IncorrectPassword("Username or Password was incorrect");
-            }
-            if(user == null){
+            }else if(user == null){
+                loggedIn = false;
                 logger.warn("Username or Password was incorrect");
                 throw new UsernameDoesNotExistException("Username or Password was incorrect");
             }
         }catch(Exception e){
             e.printStackTrace();
-            return false;
+            return loggedIn;
+        }finally {
+            session.close();
         }
-        return false;
+        return loggedIn;
     }
 
     @Override
