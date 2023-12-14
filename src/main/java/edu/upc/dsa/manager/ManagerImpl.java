@@ -116,7 +116,7 @@ public class ManagerImpl implements Manager{
         try{
             session = FactorySession.openSession();
             User user2 = (User) session.get(user, "username", username);
-            if (user2 != null && user.getPassword().equals(password)){
+            if ((user2 != null) && user.getPassword().equals(password)){
                 logger.info("Welcome User:"+username);
                 loggedIn = true;
             }else if(!user.getPassword().equals(password)){

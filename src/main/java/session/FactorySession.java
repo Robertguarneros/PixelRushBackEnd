@@ -19,7 +19,7 @@ public class FactorySession {
         Connection conn = null;
         try {
             conn =
-                    DriverManager.getConnection("jdbc:mariadb://localhost:3306/dsaDB?" + "user=root&password=Mazinger72");
+                    DriverManager.getConnection("jdbc:mariadb://localhost:3306/pixelrushdb?" + "user=root&password=1234");
 
         } catch (SQLException ex) {
             // handle any errors
@@ -36,7 +36,7 @@ public class FactorySession {
 
         try {
             st = con.createStatement();
-            st.execute("INSERT INTO items (name) VALUES ('Roberto')");
+            st.execute("INSERT INTO user (username,password,mail,name,surname,birthdate,photo,state,pointsEarned) VALUES ('Roberto','123','1','1','1','1',null,null,0)");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

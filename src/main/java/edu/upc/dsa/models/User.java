@@ -1,5 +1,8 @@
 package edu.upc.dsa.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +38,8 @@ public class User {
         this.photo = null; //user will put a photo after the register
         this.state = null; //same as photo
         this.birthDate = birthDate;
-        this.matchesPlayed = new ArrayList<>();//create empty lists of matches
-        this.ownedObjects = new ArrayList<>();//create empty list of owned objects
+        this.matchesPlayed = null;//create empty lists of matches
+        this.ownedObjects = null;//create empty list of owned objects
         this.pointsEarned = 0;//User starts with 0 points earned
     }
     //all getters and setters from attributes of User class
@@ -151,10 +154,6 @@ public class User {
             return -2;
         }
     }
-    public int getNumOfMatches(){
-        if(matchesPlayed !=null){
-            return matchesPlayed.size();
-        }
-        else return 0;
-    }
+
+
 }
