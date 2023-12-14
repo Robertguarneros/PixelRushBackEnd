@@ -17,7 +17,13 @@ import java.net.URI;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://147.83.7.203:80/dsaApp/";
+
+
+    //La primera opcion es para trabajar en maquina local, la segunda es para que funcione con el servidor UPC.
+
+    public static final String BASE_URI = "http://localhost:8080/dsaApp/";
+    //public static final String BASE_URI = "http://147.83.7.203:80/dsaApp/";
+
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -68,4 +74,3 @@ public class Main {
         server.stop();
     }
 }
-

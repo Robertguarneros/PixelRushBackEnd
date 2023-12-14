@@ -39,8 +39,12 @@
     window.onload = function() {
 
       // Build a system
+
+      //El primer URL es para el servidor UPC, el segundo para probar en maquina local
+
       const ui = SwaggerUIBundle({
-        url: "http://147.83.7.203:80/dsaApp/swagger.json",
+        //url: "http://147.83.7.203:80/dsaApp/swagger.json",
+        url: "http://localhost:8080/dsaApp/swagger.json",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

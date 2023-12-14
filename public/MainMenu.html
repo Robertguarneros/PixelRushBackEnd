@@ -9,6 +9,12 @@
     <script>
         var storedUsername = sessionStorage.getItem('username');
 
+        // Verifica si el usuario ha iniciado sesión
+        if (storedUsername == null) {
+            // Redirige a la página de inicio de sesión si no ha iniciado sesión
+            window.location.href = "Welcome.html";
+        }
+
         // Display the welcome message with the username
         document.addEventListener('DOMContentLoaded', function () {
             // Muestra el mensaje de bienvenida con el nombre de usuario
@@ -31,7 +37,7 @@
         }
 
         function TiendaDatos() {
-            window.location.href = "Store.html";
+            window.location.href = "Comprar.html";
         }
     </script>
 
