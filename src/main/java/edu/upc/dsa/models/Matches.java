@@ -1,21 +1,18 @@
 package edu.upc.dsa.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class
-Match {
+Matches {
     String username;
     int totalPoints;
     int currentLVL;
     int maxLVL;
-    //List<Integer> pointsObtainedPerLevel;
+
 
     //empty constructor
-    public Match(){}//must have isInMatch = false to avoid errors.
+    public Matches(){}//must have isInMatch = false to avoid errors.
 
     //fully constructor
-    public Match(String username ) {
+    public Matches(String username ) {
         this.username = username;
         this.totalPoints = 0;//user always starts with 0 points
         this.currentLVL = 1;//user always start at level 1
@@ -41,13 +38,6 @@ Match {
         this.totalPoints = totalPoints;
     }
 
-   /* public List<Integer> getPointsObtainedPerLevel() {
-        return pointsObtainedPerLevel;
-    }*/
-
-   /* public void setPointsObtainedPerLevel(List<Integer> pointsObtainedPerLevel) {
-        this.pointsObtainedPerLevel = pointsObtainedPerLevel;
-    }*/
 
     public int getCurrentLVL() {
         return currentLVL;

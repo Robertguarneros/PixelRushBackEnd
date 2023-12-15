@@ -36,7 +36,8 @@ public class FactorySession {
 
         try {
             st = con.createStatement();
-            st.execute("INSERT INTO user (username,password,mail,name,surname,birthdate,photo,state,pointsEarned) VALUES ('Roberto','123','1','1','1','1',null,null,0)");
+            st.execute("INSERT INTO user (username,password,mail,name,surname,photo,state,birthDate,pointsEarned) " +
+                    "VALUES ('robertoguarneros11','123','roberto@gmail.com','Roberto', 'Guarneros',null,null,'12/07/2000',990)");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

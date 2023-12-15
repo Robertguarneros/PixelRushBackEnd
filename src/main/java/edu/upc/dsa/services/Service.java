@@ -3,7 +3,7 @@ import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.manager.Manager;
 import edu.upc.dsa.manager.ManagerImpl;
 import edu.upc.dsa.models.bodies.LoginCredentials;
-import edu.upc.dsa.models.Match;
+import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.models.bodies.RegisterCredentials;
@@ -115,20 +115,20 @@ public class Service {
         return Response.status(200).entity(entity).build();
     }
     //Get played matches by username
-    @GET
+   /* @GET
     @ApiOperation(value = "get played matches from user", notes = "return list")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Match.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "OK", response = Matches.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "Username does not exist")
     })
     @Path("/getPlayedMatchesFromUser/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPlayedMatchesFromUser(@PathParam("username") String username) throws UsernameDoesNotExistException {
-        List<Match> playedMatches = this.m.getPlayedMatches(username);
-        GenericEntity<List<Match>> entity = new GenericEntity<List<Match>>(playedMatches) {};
+        List<Matches> playedMatches = this.m.getPlayedMatches(username);
+        GenericEntity<List<Matches>> entity = new GenericEntity<List<Matches>>(playedMatches) {};
         if(!playedMatches.isEmpty()||this.m.getUser(username)!=null) return Response.status(200).entity(entity).build();
         else return Response.status(404).build();
-    }
+    }*/
     //Get object
     @GET
     @ApiOperation(value = "get Object information", notes = "")
@@ -153,7 +153,7 @@ public class Service {
     @Path("/getActiveMatch/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getObjectListFromStore(@PathParam("username")String username) {
-        Match m = this.m.getMatch(username);
+        Matches m = this.m.getMatch(username);
         if(m!=null) return Response.status(200).entity(m).build();
         else return Response.status(404).build();
     }
@@ -167,7 +167,7 @@ public class Service {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response registerNewUser(RegisterCredentials user){
         try {
-            this.m.register(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getMail(), user.getBirthDate());
+            this.m.register(user.getUsername(), user.getPassword(),user.getMail(), user.getName(), user.getSurname(), user.getBirthDate());
             return Response.status(201).build();
         }catch (UsernameDoesExist e){
             return  Response.status(404).build();
@@ -192,7 +192,7 @@ public class Service {
         }
     }
     // Add item to user
-    @PUT
+    /*@PUT
     @ApiOperation(value = "Add item to user", notes = "")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Item added successfully"),
@@ -213,7 +213,7 @@ public class Service {
             return Response.status(551).build();
         }
         return Response.status(201).build();
-    }
+    }*/
     // Create a new Match
     @PUT
     @ApiOperation(value = "Create a new Match", notes = "")
@@ -268,7 +268,7 @@ public class Service {
         }
     }
     // Next Level
-    @PUT
+    /*@PUT
     @ApiOperation(value = "Change level for a user", notes = "")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Level changed successfully"),
@@ -283,9 +283,9 @@ public class Service {
             return Response.status(404).build();
         }
         return Response.status(201).build();
-    }
+    }*/
     // End active match
-    @PUT
+   /* @PUT
     @ApiOperation(value = "End a match for a user", notes = "")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Match ended successfully"),
@@ -300,7 +300,7 @@ public class Service {
             return Response.status(404).build();
         }
         return Response.status(201).build();
-    }
+    }*/
     //add object to store
     @POST
     @ApiOperation(value = "Add new object to store", notes = "")

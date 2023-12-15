@@ -21,10 +21,7 @@ public class User {
     }
 
     int pointsEarned; //We need an attribute points to buy!!!!!
-    //Played Matches list
-    List<Match> matchesPlayed;
-    //list of owned objects;
-    List<StoreObject> ownedObjects;
+
     //empty constructor
     public User(){}
     // full constructor
@@ -38,8 +35,6 @@ public class User {
         this.photo = null; //user will put a photo after the register
         this.state = null; //same as photo
         this.birthDate = birthDate;
-        this.matchesPlayed = null;//create empty lists of matches
-        this.ownedObjects = null;//create empty list of owned objects
         this.pointsEarned = 0;//User starts with 0 points earned
     }
     //all getters and setters from attributes of User class
@@ -107,53 +102,15 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public List<Match> getMatchesPlayed() {
-        return matchesPlayed;
-    }
 
-    public void setMatchesPlayed(List<Match> matchesPlayed) {
-        this.matchesPlayed = matchesPlayed;
-    }
-
-    public List<StoreObject> getOwnedObjects() {
-        return ownedObjects;
-    }
-
-    public void setOwnedObjects(List<StoreObject> ownedObjects) {
-        this.ownedObjects = ownedObjects;
-    }
     public int getPointsEarned() {
         return pointsEarned;
     }
 
-    public void setPointsEarned() {
-        int sumOfPointsEarned=0;
-        for(Match m:matchesPlayed){
-            sumOfPointsEarned = sumOfPointsEarned+m.getTotalPoints();
-        }
-
-        this.pointsEarned = sumOfPointsEarned;
-    }
 
     // Methods of our class
-    public void addNewFinishedMatch(Match m){ this.matchesPlayed.add(m);}//function to add a new match to the played matches list
-    public int addNewOwnedObject(StoreObject newObject){
-        if (newObject == null){
-            ownedObjects = new ArrayList<>();
-        }
-        // Check if the item ID is already in ownedObjects
-        for (StoreObject ownedObject : ownedObjects) {
-            if (ownedObject.getObjectID().equals(newObject.getObjectID())) {
-                return -1; // Object with the same ID is already owned
-            }
-        }
-        if(pointsEarned> newObject.getPrice()){
-            ownedObjects.add(newObject);
-            return 1;
-        }else{
-            return -2;
-        }
-    }
+
+
 
 
 }

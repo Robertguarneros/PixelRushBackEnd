@@ -2,12 +2,10 @@ package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.User;
-import edu.upc.dsa.models.Match;
+import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
 import session.Session;
-import session.SessionImpl;
-import session.util.QueryHelper;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
     HashMap<String,User> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
-    HashMap<String, Match> activeMatches; // Key = username
+    HashMap<String, Matches> activeMatches; // Key = username
 
 
     private static Manager instance;
@@ -71,31 +69,31 @@ public class ManagerImpl implements Manager{
         return new ArrayList<>(storeObjects.values());
     }
 
-    @Override
-    public List<Match> getPlayedMatches(String username) {
+   /* @Override
+    public List<Matches> getPlayedMatches(String username) {
         User user = users.get(username);
         if(user != null){
             return user.getMatchesPlayed();
         }else return null;
-    }
+    }*/
     @Override
     public StoreObject getObject(String objectID){
         logger.info("Get object ("+objectID+")");
         return storeObjects.get(objectID);
     }
     @Override
-    public Match getMatch(String username){
+    public Matches getMatch(String username){
         logger.info("get match for ("+username+")");
         return activeMatches.get(username);
     }
 
     @Override
-    public void register(String username, String password, String name, String surname, String mail, String birthDate) throws UsernameDoesExist {
+    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist {
         Session session = null;
         if(users.containsKey(username)){
             throw new UsernameDoesExist("This username already exist");
         }
-        User user = new User(username,password,name,surname,mail,birthDate);
+        User user = new User(username,password,mail,name,surname,birthDate);
         try{
             session = FactorySession.openSession();
             session.save(user, username); //username is the primaryKey value
@@ -137,7 +135,7 @@ public class ManagerImpl implements Manager{
         return loggedIn;
     }
 
-    @Override
+    /*@Override
     public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist,NotEnoughPoints, AlreadyOwned {
         User user = users.get(username);
         if(user == null){
@@ -156,7 +154,7 @@ public class ManagerImpl implements Manager{
                 throw new AlreadyOwned("Already Owned");
             }
         }
-    }
+    }*/
 
     @Override
     public void createMatch(String username)throws UsernameDoesNotExistException, UsernameIsInMatchException {
@@ -168,7 +166,7 @@ public class ManagerImpl implements Manager{
             logger.warn("User is currently in match");
             throw new UsernameIsInMatchException("User is in match");
         }else {
-            Match m = new Match(username);
+            Matches m = new Matches(username);
             activeMatches.put(username, m);
             logger.info("Match created");
         }
@@ -206,10 +204,10 @@ public class ManagerImpl implements Manager{
         }
     }
 
-    @Override
+    /*@Override
     public void nextLevel(String username, int points) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
 
-        Match activeMatchExists = activeMatches.get(username);
+        Matches activeMatchExists = activeMatches.get(username);
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
@@ -230,9 +228,9 @@ public class ManagerImpl implements Manager{
             activeMatches.remove(username);
             logger.info("User has finished match, all levels passed");
         }
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void endMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
@@ -241,12 +239,12 @@ public class ManagerImpl implements Manager{
             logger.warn(username+"is not in a match");
             throw new UsernameisNotInMatchException("User is not in match");
         } else {
-            Match m = activeMatches.get(username);
+            Matches m = activeMatches.get(username);
             users.get(username).addNewFinishedMatch(m);
             activeMatches.remove(username);
             logger.info("User has ended match");
         }
-    }
+    }*/
 
     @Override
     public void addObjectToStore(String objectID, String articleName, int price, String description){
