@@ -12,10 +12,14 @@ public class QueryHelper {
                 stringBuffer.append(field).append(", ");}
         }
         stringBuffer.setLength(stringBuffer.length()-2);
-        stringBuffer.append(") VALUES (?");
-        for (String field: fields) {
-            if (!field.equalsIgnoreCase(primaryKey))
-            stringBuffer.append(", ?");
+        stringBuffer.append(") VALUES (");
+        for (int i = 0; i < fields.length; i++) {
+            if (!fields[i].equalsIgnoreCase(primaryKey)) {
+                stringBuffer.append("?");
+                if (i < fields.length - 1) {
+                    stringBuffer.append(", ");
+                }
+            }
         }
         stringBuffer.append(")");
         return stringBuffer.toString();

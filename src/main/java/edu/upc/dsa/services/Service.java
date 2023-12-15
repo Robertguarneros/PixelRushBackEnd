@@ -16,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.List;
 
 @Api(value = "/pixelRush", description = "Endpoint to Pixel Rush Service")
@@ -24,20 +25,22 @@ import java.util.List;
 public class Service {
     private Manager m;
 
-    public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist {
+    public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist, SQLException {
         this.m = ManagerImpl.getInstance();
         if(m.size()==0){
-            m.register("robertoguarneros11","123","Roberto","Guarneros","roberto@gmail.com","02/11/2002");
+
+            m.register("robertoguarneros11","123","roberto@gmail.com","Guarneros","Roberto","02/11/2002");
+            m.register("titi", "456","titi@gmail.com","Carles","Sanchez","02/11/2002");
+            m.register("Luxu","789","lucia@gmail.com","Lucia","Ocaña","02/11/2002");
+            m.register("Xuculup","000","Ángel","angel@gmail.com","Redondo","02/11/2002");
+
 
             //Commented since we do not have the DDBB implementation yet
             //m.createMatch("robertoguarneros11");
             //m.endMatch("robertoguarneros11");
             //m.getUser("robertoguarneros11").setPointsEarned(500);//set 500 points, so we can testAddItem
 
-            m.register("titi", "456","Carles","Sanchez","titi@gmail.com","02/11/2002");
             //m.createMatch("titi");
-            m.register("Luxu","789","Lucia","Ocaña","lucia@gmail.com","02/11/2002");
-            m.register("Xuculup","000","Ángel","Redondo","angel@gmail.com","02/11/2002");
             //m.addObjectToStore("123","Poción", 100, "Poción de salto");
             //m.addObjectToStore("222","skin",50,"skin cosmetica");
         }
@@ -171,6 +174,8 @@ public class Service {
             return Response.status(201).build();
         }catch (UsernameDoesExist e){
             return  Response.status(404).build();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     //login

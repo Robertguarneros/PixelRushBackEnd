@@ -7,6 +7,8 @@ import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
 import session.Session;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +46,12 @@ public class ManagerImpl implements Manager{
 
         return ret;
     }
-
     @Override
-    public int numberOfUsers(){//this is the same as sizeUsers
-        return this.users.size();
+    public int numberOfUsers() {
+
+        return 0; // Return 0 if there is an error or no users
     }
+
 
     @Override
     public User getUser(String username) throws UsernameDoesNotExistException{
@@ -88,19 +91,21 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist {
+    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist,SQLException {
         Session session = null;
-        if(users.containsKey(username)){
-            throw new UsernameDoesExist("This username already exist");
-        }
-        User user = new User(username,password,mail,name,surname,birthDate);
         try{
+            if(users.containsKey(username)){
+                throw new UsernameDoesExist("This username already exist");
+            }
+            User user = new User(username,password,mail,name,surname,birthDate);
             session = FactorySession.openSession();
             session.save(user, username); //username is the primaryKey value
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            session.close();
+            users.put(username,user);
+        } finally {
+            // Close the session
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

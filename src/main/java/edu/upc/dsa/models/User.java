@@ -16,10 +16,6 @@ public class User {
     String state;
     String birthDate;
 
-    public void setPointsEarned(int pointsEarned) {
-        this.pointsEarned = pointsEarned;
-    }
-
     int pointsEarned; //We need an attribute points to buy!!!!!
 
     //empty constructor
@@ -106,11 +102,7 @@ public class User {
     public int getPointsEarned() {
         return pointsEarned;
     }
-
-
-    // Methods of our class
-
-
-
-
+    public void setPointsEarned(int pointsEarned) {
+        this.pointsEarned = pointsEarned;
+    }
 }

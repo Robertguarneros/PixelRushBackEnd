@@ -11,22 +11,18 @@ public class SessionImpl implements Session{
 
     public SessionImpl(Connection conn){this.conn = conn;}
 
-    public void save(Object entity, String primaryKey) throws SQLException{
+    public void save(Object entity, String primaryKey){
         String insertQuery = QueryHelper.createQueryINSERT(entity, primaryKey);
-        PreparedStatement preparedStatement = null;
-
-        try {
-            preparedStatement = conn.prepareStatement(insertQuery);
-            int i =1;
-            for(String field: ObjectHelper.getFields(entity)){
-                if (!field.equalsIgnoreCase(primaryKey)){
+        try (PreparedStatement preparedStatement = conn.prepareStatement(insertQuery)) {
+            int i = 1;
+            for (String field : ObjectHelper.getFields(entity)) {
+                if (!field.equalsIgnoreCase(primaryKey)) {
                     preparedStatement.setObject(i++, ObjectHelper.getter(entity, field));
                 }
             }
-
-            preparedStatement.executeUpdate();
-
-        }catch (SQLException e){
+            preparedStatement.executeQuery();
+        }catch (SQLException e) {
+            // Handle the exception more gracefully (log or throw a custom exception)
             e.printStackTrace();
         }
 
@@ -42,7 +38,7 @@ public class SessionImpl implements Session{
 
     public Object get(Object entity, String primaryKey, Object value){
         String selectQuery = QueryHelper.createQuerySELECT(entity, primaryKey);
-        ResultSet resultSet;
+        ResultSet resultSet=null;
         PreparedStatement preparedStatement = null;
 
         try {
@@ -75,17 +71,16 @@ public class SessionImpl implements Session{
             throw new RuntimeException(e);
 
         }finally {
-
-            try{
-                if (preparedStatement != null){
-
-                    preparedStatement.close();
-
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
                 }
-            }catch (SQLException e){
-
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                // Handle the exception more gracefully (log or throw a custom exception)
                 e.printStackTrace();
-
             }
             return  null;
         }
