@@ -9,7 +9,6 @@ public class Users {
     String photo; //.png or .jpg <img src="photo.jpg"> (Front-end job)
     String state;
     String birthDate;
-
     int pointsEarned; //We need an attribute points to buy!!!!!
 
     //empty constructor
@@ -96,7 +95,6 @@ public class Users {
     public int getPointsEarned() {
         return pointsEarned;
     }
-
     public void setPointsEarned(int pointsEarned) {
         this.pointsEarned = pointsEarned;
     }

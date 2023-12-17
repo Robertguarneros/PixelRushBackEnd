@@ -232,7 +232,7 @@ public class ManagerImpl implements Manager{
             }
             Users newUser = new Users(username,password,mail,name,surname,birthDate);
             session = FactorySession.openSession();
-            session.save(users, username); //username is the primaryKey value
+            session.save(newUser, username); //username is the primaryKey value
             this.users.put(username, newUser);
         } finally {
             // Close the session
