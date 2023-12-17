@@ -91,25 +91,6 @@ public class ManagerImpl implements Manager{
     }
 
     @Override
-    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist,SQLException {
-        Session session = null;
-        try{
-            if(users.containsKey(username)){
-                throw new UsernameDoesExist("This username already exist");
-            }
-            User user = new User(username,password,mail,name,surname,birthDate);
-            session = FactorySession.openSession();
-            session.save(user, username); //username is the primaryKey value
-            users.put(username,user);
-        } finally {
-            // Close the session
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
-
-    @Override
     public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
         boolean loggedIn = false;
         Session session = null;
@@ -261,4 +242,24 @@ public class ManagerImpl implements Manager{
         }
         else logger.warn("this object already exists");
     }
+
+    @Override
+    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist,SQLException {
+        Session session = null;
+        try{
+            if(users.containsKey(username)){
+                throw new UsernameDoesExist("This username already exist");
+            }
+            User user = new User(username,password,mail,name,surname,birthDate);
+            session = FactorySession.openSession();
+            session.save(user, username); //username is the primaryKey value
+            users.put(username,user);
+        } finally {
+            // Close the session
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 }

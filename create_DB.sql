@@ -45,5 +45,7 @@ CREATE TABLE OwnedObjects(
 INSERT INTO User VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez',null,null,'17/11/1998',90);
 INSERT INTO User VALUES('titi','456','titi@gmail.com','Carles','Sanchez',null,null,'17/11/1998',9000);
 
+INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
 
+INSERT INTO StoreObject VALUES ('telephone','telephone','100',null,null);
