@@ -12,29 +12,29 @@ CREATE TABLE Users(
 	photo VARCHAR(500),
 	state VARCHAR(300),
 	birthDate VARCHAR(15),
-	pointsEarned INT
+	pointsEarned int
 )ENGINE = InnoDB;
 
 CREATE TABLE StoreObject(
 	objectID VARCHAR(20) PRIMARY KEY NOT NULL,
 	articleName VARCHAR(20) NOT NULL,
-	price INT NOT NULL,
+	price int NOT NULL,
 	description VARCHAR(200),
 	articlePhoto VARCHAR(500)
 )ENGINE = InnoDB;
 
 CREATE TABLE Matches(
-	id INT NOT NULL AUTO_INCREMENT,
+	id int NOT NULL AUTO_INCREMENT,
 	username VARCHAR(30) NOT NULL,
-	totalPoints INT,
-	currentLVL INT NOT NULL,
-	maxLVL INT NOT NULL,
+	totalPoints int,
+	currentLVL int NOT NULL,
+	maxLVL int NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY (username) REFERENCES Users(username)
 )ENGINE = InnoDB;
 
 CREATE TABLE OwnedObjects(
-	id INT NOT NULL AUTO_INCREMENT,
+	id int NOT NULL AUTO_INCREMENT,
 	username VARCHAR(30) NOT NULL,
 	objectID VARCHAR(20) NOT NULL,
 	PRIMARY KEY(id),
@@ -49,3 +49,5 @@ INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','
 
 
 INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','no photo');
+
+INSERT INTO OwnedObjects (username, objectID) VALUES ('titi','telephone');

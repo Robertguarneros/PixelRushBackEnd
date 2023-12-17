@@ -1,10 +1,11 @@
 package edu.upc.dsa.models;
 
-public class OwnedObject {
+public class OwnedObjects {
     String username;
     String objectID;
 
-    public OwnedObject(String username, String objectID) {
+    public OwnedObjects(){};
+    public OwnedObjects(String username, String objectID) {
         this.username = username;
         this.objectID = objectID;
     }

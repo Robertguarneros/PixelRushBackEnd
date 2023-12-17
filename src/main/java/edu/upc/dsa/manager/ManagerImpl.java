@@ -1,6 +1,7 @@
 package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
+import edu.upc.dsa.models.OwnedObjects;
 import edu.upc.dsa.models.Users;
 import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
@@ -19,7 +20,6 @@ public class ManagerImpl implements Manager{
     HashMap<String, Users> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
     HashMap<String, Matches> activeMatches; // Key = username
-
 
     private static Manager instance;
     final static Logger logger = Logger.getLogger(ManagerImpl.class);
@@ -67,39 +67,12 @@ public class ManagerImpl implements Manager{
             return user.getMatchesPlayed();
         }else return null;
     }*/
-    @Override
-    public StoreObject getObject(String objectID){
-        logger.info("Get object ("+objectID+")");
-        return storeObjects.get(objectID);
-    }
+
     @Override
     public Matches getMatch(String username){
         logger.info("get match for ("+username+")");
         return activeMatches.get(username);
     }
-
-
-
-    /*@Override
-    public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist,NotEnoughPoints, AlreadyOwned {
-        User user = users.get(username);
-        if(user == null){
-            logger.warn("User does not exist");
-            throw new UsernameDoesNotExistException("User does not exist");
-        }else if(objectID==null){
-            logger.warn("ObjectID does not exist");
-            throw new ObjectIDDoesNotExist("ObjectID does not exist");
-        } else {
-            int response = user.addNewOwnedObject(objectID);
-            if(response==1){
-                logger.info("The item:"+objectID+" was added into the User: "+username);
-            }else if(response == -2){
-                throw new NotEnoughPoints("Not Enough Points");
-            }else if(response == -1){
-                throw new AlreadyOwned("Already Owned");
-            }
-        }
-    }*/
 
     @Override
     public int getLevelFromMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
@@ -270,5 +243,71 @@ public class ManagerImpl implements Manager{
             throw new UsernameDoesNotExistException("Username or Password was incorrect");
         }
         return loggedIn;
+    }
+
+    @Override
+    public StoreObject getObject(String objectID)throws ObjectIDDoesNotExist{
+        logger.info("getObject(" + objectID + ")");
+        Session session = null;
+        StoreObject objectInDB = null;
+
+        session = FactorySession.openSession();
+        objectInDB = (StoreObject) session.get(StoreObject.class, "objectID", objectID);
+        session.close();
+
+        if (objectInDB == null) {
+            logger.info("Object: (" + objectID + ") does not exist");
+            throw new ObjectIDDoesNotExist("Object does not exist");
+        }
+        return objectInDB;
+    }
+    @Override
+    public List<OwnedObjects> getOwnedObjects(String username)throws UsernameDoesNotExistException{
+        logger.info("getOwnedObjects for(" + username + ")");
+        List<OwnedObjects> ownedObjects;
+        Users userInDB = null;
+        userInDB =getUser(username);
+
+        Session session = null;
+        session = FactorySession.openSession();
+        ownedObjects = (List<OwnedObjects>) session.getList(OwnedObjects.class, "username", username);
+        session.close();
+
+        if(userInDB == null){
+            logger.warn("User does not exist");
+            throw new UsernameDoesNotExistException("User does not exist");
+        }
+        return ownedObjects;
+    }
+    @Override
+    public void addItemToUser(String username, String objectID) throws UsernameDoesNotExistException, ObjectIDDoesNotExist, NotEnoughPoints, AlreadyOwned {
+        Users userInDB = getUser(username);
+        StoreObject objectInDB = getObject(objectID);
+
+        if (userInDB == null) {
+            logger.warn("User does not exist");
+            throw new UsernameDoesNotExistException("User does not exist");
+        } else if (objectInDB == null) {
+            logger.warn("ObjectID does not exist");
+            throw new ObjectIDDoesNotExist("ObjectID does not exist");
+        } else if (objectInDB.getPrice() > userInDB.getPointsEarned()) {
+            logger.warn("Not enough points");
+            throw new NotEnoughPoints("Not enough points");
+        } else {
+            List<OwnedObjects> ownedObjects = getOwnedObjects(username);
+            for (OwnedObjects ownedObject : ownedObjects) {
+                if (ownedObject.getObjectID().equals(objectID)) {
+                    logger.warn("Already Owned");
+                    throw new AlreadyOwned("Already Owned");
+                }
+            }
+
+            // If the object is not already owned, proceed with adding it to the user
+            OwnedObjects ownedObject = new OwnedObjects(username, objectID);
+            Session session = FactorySession.openSession();
+            session.save(ownedObject, username);
+            session.close();
+            logger.info("Item bought");
+        }
     }
 }

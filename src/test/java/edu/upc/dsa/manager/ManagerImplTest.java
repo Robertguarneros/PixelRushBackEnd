@@ -173,7 +173,7 @@ public class ManagerImplTest {
         Assert.assertEquals(0,this.m.getUser("robertoguarneros11").getMatchesPlayed().get(0).getPointsObtainedPerLevel().size());
     }*/
     @Test
-    public void testAddObjectToStore() {
+    public void testAddObjectToStore() throws ObjectIDDoesNotExist {
         this.m.addObjectToStore("543","Poción", 100, "Poción de salto");
         Assert.assertEquals(3,this.m.getObjectListFromStore().size());
         Assert.assertEquals(100,this.m.getObject("543").getPrice());

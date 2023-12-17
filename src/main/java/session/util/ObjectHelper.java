@@ -38,13 +38,28 @@ public class ObjectHelper {
         }
     }
 
-    public static void setter(Object object, String property, Object value){
+    public static void setter(Object object, String property, Object value) {
         try {
             String setterName = "set" + property.substring(0, 1).toUpperCase() + property.substring(1);
-            Method setterMethod = object.getClass().getMethod(setterName, value.getClass());
+            Method setterMethod = findSetterMethod(object.getClass(), setterName, value);
             setterMethod.invoke(object, value);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }
+
+    private static Method findSetterMethod(Class<?> clazz, String methodName, Object value) throws NoSuchMethodException {
+        try {
+            return clazz.getMethod(methodName, value.getClass());
+        } catch (NoSuchMethodException e) {
+            // If the method with value.getClass() parameter is not found,
+            // try to find the method with the corresponding primitive type.
+            if (value.getClass() == Integer.class) {
+                return clazz.getMethod(methodName, int.class);
+            } else {
+                throw e;
+            }
+        }
+    }
+
 }

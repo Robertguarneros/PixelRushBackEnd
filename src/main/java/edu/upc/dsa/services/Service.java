@@ -140,10 +140,12 @@ public class Service {
     })
     @Path("/getObjectInformation/{objectID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getObjectInformation(@PathParam("objectID") String objectID) {
-        StoreObject object = this.m.getObject(objectID);
-        if(object!=null) return Response.status(200).entity(object).build();
-        else return Response.status(404).build();
+    public Response getObjectInformation(@PathParam("objectID") String objectID) throws ObjectIDDoesNotExist {
+        try{
+            StoreObject object = this.m.getObject(objectID);
+            return Response.status(200).entity(object).build();
+        } catch(ObjectIDDoesNotExist e) {
+            return Response.status(404).build();}
     }
     //Get match
     @GET
@@ -196,7 +198,7 @@ public class Service {
         }
     }
     // Add item to user
-    /*@PUT
+    @PUT
     @ApiOperation(value = "Add item to user", notes = "")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Item added successfully"),
@@ -208,7 +210,7 @@ public class Service {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response addItemToUser(@PathParam("username")String username,@PathParam("objectID")String objectID){
         try {
-            this.m.addItemToUser(username,this.m.getObject(objectID));
+            this.m.addItemToUser(username,objectID);
         } catch(UsernameDoesNotExistException | ObjectIDDoesNotExist e){
             return Response.status(404).build();
         }catch (AlreadyOwned e){
@@ -217,7 +219,7 @@ public class Service {
             return Response.status(551).build();
         }
         return Response.status(201).build();
-    }*/
+    }
     // Create a new Match
     @PUT
     @ApiOperation(value = "Create a new Match", notes = "")

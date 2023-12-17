@@ -4,6 +4,8 @@ import session.util.QueryHelper;
 
 import java.sql.*;
 import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SessionImpl implements Session{
     private final Connection conn;
@@ -24,7 +26,6 @@ public class SessionImpl implements Session{
             // Handle the exception more gracefully (log or throw a custom exception)
             e.printStackTrace();
         }
-
     }
 
     public void close(){
@@ -35,55 +36,6 @@ public class SessionImpl implements Session{
         }
     }
 
-    /*public Object get(Object entity, String primaryKey, Object value){
-        String selectQuery = QueryHelper.createQuerySELECT(entity, primaryKey);
-        ResultSet resultSet=null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            preparedStatement = conn.prepareStatement(selectQuery);
-            preparedStatement.setObject(1,value);
-            resultSet = preparedStatement.executeQuery();
-
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            int numberOfColumns = resultSetMetaData.getColumnCount();
-            Object o = entity.getClass().newInstance();
-            Object valueColumn = null;
-
-            while(resultSet.next()){
-                for (int i = 1; i <= numberOfColumns; i++) {
-                    String nameColumn = resultSetMetaData.getColumnName(i);
-                    ObjectHelper.setter(o, nameColumn, resultSet.getObject(i));
-                    System.out.println((nameColumn));
-                    System.out.println((resultSet.getObject(i)));
-                    valueColumn = resultSet.getObject(i);
-                }
-            }
-            return o;
-
-        }catch (SQLException e){
-
-            e.printStackTrace();
-
-        }catch (InstantiationException | IllegalAccessException e){
-
-            throw new RuntimeException(e);
-
-        }finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-            } catch (SQLException e) {
-                // Handle the exception more gracefully (log or throw a custom exception)
-                e.printStackTrace();
-            }
-            return  null;
-        }
-    }*/
     public Object get(Class theClass, String pk, Object value) {
         String selectQuery  = QueryHelper.createQuerySELECT(theClass, pk);
         ResultSet rs;
@@ -123,5 +75,44 @@ public class SessionImpl implements Session{
 
         return null;
     }
+    public List<Object> getList(Class theClass, String key, Object value) {
+        String selectQuery = QueryHelper.createQuerySELECT(theClass, key);
+        ResultSet rs = null;
+        PreparedStatement pstm = null;
+        List<Object> list = new LinkedList<>();
+
+        try {
+            pstm = conn.prepareStatement(selectQuery);
+            pstm.setObject(1, value);
+            rs = pstm.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            int numberOfColumns = rsmd.getColumnCount();
+            while (rs.next()) {
+                Object o = theClass.newInstance();
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    String columnName = rsmd.getColumnName(i);
+                    ObjectHelper.setter(o, columnName, rs.getObject(i));
+                }
+                list.add(o);
+            }
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstm != null) {
+                    pstm.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
 
 }

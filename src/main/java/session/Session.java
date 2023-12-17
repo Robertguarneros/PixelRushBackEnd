@@ -10,5 +10,6 @@ public interface Session<E> {
     void save(Object entity, String primaryKey);
     void close();
     Object get(Class theClass, String pk, Object value);
+    List<Object> getList(Class theClass, String key, Object value);
 
 }
