@@ -1,12 +1,6 @@
 package edu.upc.dsa.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class User {
+public class Users {
     String username;
     String password;
     String mail;
@@ -19,21 +13,22 @@ public class User {
     int pointsEarned; //We need an attribute points to buy!!!!!
 
     //empty constructor
-    public User(){}
+    public Users(){}
     // full constructor
-    public User(String username, String password, String mail, String name,
-                String surname, String birthDate) {
+    public Users(String username, String password, String mail, String name,
+                 String surname, String birthDate) {
         this.username = username;
         this.password = password;
         this.mail = mail;
         this.name = name;
         this.surname = surname;
-        this.photo = null; //user will put a photo after the register
-        this.state = null; //same as photo
+        this.photo = "no photo"; //user will put a photo after the register
+        this.state = "no state"; //same as photo
         this.birthDate = birthDate;
         this.pointsEarned = 0;//User starts with 0 points earned
     }
     //all getters and setters from attributes of User class
+
     public String getUsername() {
         return username;
     }
@@ -98,10 +93,10 @@ public class User {
         this.birthDate = birthDate;
     }
 
-
     public int getPointsEarned() {
         return pointsEarned;
     }
+
     public void setPointsEarned(int pointsEarned) {
         this.pointsEarned = pointsEarned;
     }

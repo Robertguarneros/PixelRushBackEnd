@@ -1,7 +1,7 @@
 package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.Users;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.Matches;
 
@@ -11,8 +11,8 @@ import java.util.List;
 public interface Manager {
     public int size();
     public int numberOfUsers();
-    public User getUser(String username)throws UsernameDoesNotExistException;
-    public List<User> getAllUsers();
+    public Users getUser(String username)throws UsernameDoesNotExistException;
+    public List<Users> getAllUsers();
     public List<StoreObject>  getObjectListFromStore();
    // public List<Matches> getPlayedMatches(String username);
     public void register(String username, String password, String mail, String name, String surname,  String birthDate) throws UsernameDoesExist, SQLException;

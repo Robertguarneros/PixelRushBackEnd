@@ -1,23 +1,22 @@
 package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.Users;
 import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
 import org.apache.log4j.Logger;
 import session.Session;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import session.FactorySession;
 
 public class ManagerImpl implements Manager{
     //HashMaps are more comfortable to use
-    HashMap<String,User> users; //Key = username, seems like it inserts in alphabetical order based on username
+    HashMap<String, Users> users; //Key = username, seems like it inserts in alphabetical order based on username
     HashMap<String, StoreObject> storeObjects; //Key = objectID
     HashMap<String, Matches> activeMatches; // Key = username
 
@@ -48,22 +47,11 @@ public class ManagerImpl implements Manager{
     }
     @Override
     public int numberOfUsers() {
-
         return 0; // Return 0 if there is an error or no users
     }
 
-
     @Override
-    public User getUser(String username) throws UsernameDoesNotExistException{
-        if(users.get(username)==null){
-            throw new UsernameDoesNotExistException("User does not exist");
-        }else{
-            logger.info("getUser("+username+")");
-            return users.get(username);
-        }
-    }
-    @Override
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         return new ArrayList<>(users.values());
     }
 
@@ -94,20 +82,20 @@ public class ManagerImpl implements Manager{
     public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
         boolean loggedIn = false;
         Session session = null;
-        User user = users.get(username);
-        logger.info("username: "+user.getUsername());
-        logger.info("Password: "+user.getPassword());
+        Users users = this.users.get(username);
+        logger.info("username: "+ users.getUsername());
+        logger.info("Password: "+ users.getPassword());
         try{
             session = FactorySession.openSession();
-            User user2 = (User) session.get(user, "username", username);
-            if ((user2 != null) && user.getPassword().equals(password)){
+            Users users2 = (Users) session.get(Users.class,"username", username);
+            if ((users2 != null) && users.getPassword().equals(password)){
                 logger.info("Welcome User:"+username);
                 loggedIn = true;
-            }else if(!user.getPassword().equals(password)){
+            }else if(!users.getPassword().equals(password)){
                 loggedIn = false;
                 logger.warn("Username or Password was incorrect");
                 throw new IncorrectPassword("Username or Password was incorrect");
-            }else if(user == null){
+            }else if(users == null){
                 loggedIn = false;
                 logger.warn("Username or Password was incorrect");
                 throw new UsernameDoesNotExistException("Username or Password was incorrect");
@@ -141,22 +129,6 @@ public class ManagerImpl implements Manager{
             }
         }
     }*/
-
-    @Override
-    public void createMatch(String username)throws UsernameDoesNotExistException, UsernameIsInMatchException {
-        logger.info("Create match for user "+username);
-        if (!this.users.containsKey(username)){
-            logger.warn("User does not exist");
-            throw new UsernameDoesNotExistException("User does not exist");
-        }else if (activeMatches.get(username)!=null){
-            logger.warn("User is currently in match");
-            throw new UsernameIsInMatchException("User is in match");
-        }else {
-            Matches m = new Matches(username);
-            activeMatches.put(username, m);
-            logger.info("Match created");
-        }
-    }
 
     @Override
     public int getLevelFromMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
@@ -231,29 +203,18 @@ public class ManagerImpl implements Manager{
             logger.info("User has ended match");
         }
     }*/
-
+// These functions have been implemented with Databases
     @Override
     public void addObjectToStore(String objectID, String articleName, int price, String description){
-        logger.info("Create object with ID= "+objectID);
-        if(!storeObjects.containsKey(objectID)){
-            StoreObject newObject = new StoreObject(objectID,articleName,price,description);
-            storeObjects.put(objectID,newObject);
-            logger.info("Object successfully created");
-        }
-        else logger.warn("this object already exists");
-    }
-
-    @Override
-    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist,SQLException {
         Session session = null;
         try{
-            if(users.containsKey(username)){
-                throw new UsernameDoesExist("This username already exist");
+            if(storeObjects.containsKey(objectID)){
+                logger.info("Object already exists");
             }
-            User user = new User(username,password,mail,name,surname,birthDate);
+            StoreObject storeObject = new StoreObject(objectID, articleName, price, description);
             session = FactorySession.openSession();
-            session.save(user, username); //username is the primaryKey value
-            users.put(username,user);
+            session.save(storeObject, objectID); //username is the primaryKey value
+            storeObjects.put(objectID,storeObject);
         } finally {
             // Close the session
             if (session != null) {
@@ -262,4 +223,56 @@ public class ManagerImpl implements Manager{
         }
     }
 
+    @Override
+    public void register(String username, String password,String mail, String name, String surname,  String birthDate) throws UsernameDoesExist,SQLException {
+        Session session = null;
+        try{
+            if(this.users.containsKey(username)){
+                throw new UsernameDoesExist("This username already exist");
+            }
+            Users newUser = new Users(username,password,mail,name,surname,birthDate);
+            session = FactorySession.openSession();
+            session.save(users, username); //username is the primaryKey value
+            this.users.put(username, newUser);
+        } finally {
+            // Close the session
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+    @Override
+    public void createMatch(String username)throws UsernameDoesNotExistException, UsernameIsInMatchException {
+        Session session = null;
+        logger.info("Create match for user "+username);
+        if (!this.users.containsKey(username)){
+            logger.warn("User does not exist");
+            throw new UsernameDoesNotExistException("User does not exist");
+        }else if (activeMatches.get(username)!=null){
+            logger.warn("User is currently in match");
+            throw new UsernameIsInMatchException("User is in match");
+        }else {
+            Matches m = new Matches(username);
+            session = FactorySession.openSession();
+            session.save(m, username); //username is the primaryKey value
+            activeMatches.put(username, m);
+            logger.info("Match created");
+        }
+    }
+    @Override
+    public Users getUser(String username) throws UsernameDoesNotExistException {
+        logger.info("getUser(" + username + ")");
+        Session session = null;
+        Users foundUser = null;
+
+        session = FactorySession.openSession();
+        foundUser = (Users)session.get(Users.class, "username", username);
+        session.close();
+
+        if (foundUser == null) {
+            logger.info("Username: (" + username + ") does not exist");
+            throw new UsernameDoesNotExistException("User does not exist");
+        }
+        return foundUser;
+    }
 }

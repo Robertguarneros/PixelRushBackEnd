@@ -17,7 +17,7 @@ public class StoreObject {
         this.articleName = articleName;
         this.price = price;
         this.description = description;
-        this.articlePhoto = null;
+        this.articlePhoto = "no photo";
     }
 
     //all getters and setters from Store class

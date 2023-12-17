@@ -9,6 +9,6 @@ public interface Session<E> {
 
     void save(Object entity, String primaryKey);
     void close();
-    Object get(Object value, String primaryKey, Object entity);
+    Object get(Class theClass, String pk, Object value);
 
 }

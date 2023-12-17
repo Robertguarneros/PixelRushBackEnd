@@ -5,7 +5,7 @@ import edu.upc.dsa.manager.ManagerImpl;
 import edu.upc.dsa.models.bodies.LoginCredentials;
 import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
-import edu.upc.dsa.models.User;
+import edu.upc.dsa.models.Users;
 import edu.upc.dsa.models.bodies.RegisterCredentials;
 import io.swagger.annotations.*;
 
@@ -27,12 +27,11 @@ public class Service {
 
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist, SQLException {
         this.m = ManagerImpl.getInstance();
-        if(m.size()==0){
+        //if(m.size()==0){
 
-            m.register("robertoguarneros11","123","roberto@gmail.com","Guarneros","Roberto","02/11/2002");
-            m.register("titi", "456","titi@gmail.com","Carles","Sanchez","02/11/2002");
-            m.register("Luxu","789","lucia@gmail.com","Lucia","Ocaña","02/11/2002");
-            m.register("Xuculup","000","Ángel","angel@gmail.com","Redondo","02/11/2002");
+            //m.register("robertoguarneros11","123","roberto@gmail.com","Guarneros","Roberto","02/11/2002");
+            //m.register("Luxu","789","lucia@gmail.com","Lucia","Ocaña","02/11/2002");
+           // m.register("Xuculup","000","Ángel","angel@gmail.com","Redondo","02/11/2002");
 
 
             //Commented since we do not have the DDBB implementation yet
@@ -43,7 +42,7 @@ public class Service {
             //m.createMatch("titi");
             //m.addObjectToStore("123","Poción", 100, "Poción de salto");
             //m.addObjectToStore("222","skin",50,"skin cosmetica");
-        }
+        //}
     }
 
     //get store size
@@ -77,13 +76,13 @@ public class Service {
     @GET
     @ApiOperation(value = "get a user", notes = "given a username")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK", response = User.class),
+        @ApiResponse(code = 200, message = "OK", response = Users.class),
         @ApiResponse(code = 404, message = "Username does not exist")
     })
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) {
-        User u = null;
+        Users u = null;
         try {
             u = this.m.getUser(username);
         } catch (UsernameDoesNotExistException e) {
@@ -95,13 +94,13 @@ public class Service {
     @GET
     @ApiOperation(value = "get all users", notes = "return list")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = User.class, responseContainer="List"),
+            @ApiResponse(code = 200, message = "OK", response = Users.class, responseContainer="List"),
     })
     @Path("/getAllUsers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
-        List<User> users = this.m.getAllUsers();
-        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
+        List<Users> users = this.m.getAllUsers();
+        GenericEntity<List<Users>> entity = new GenericEntity<List<Users>>(users) {};
         return Response.status(200).entity(entity).build();
     }
     //get all objects from store

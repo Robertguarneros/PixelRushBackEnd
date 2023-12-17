@@ -47,8 +47,4 @@ public class ObjectHelper {
             e.printStackTrace();
         }
     }
-
-
-
-
 }

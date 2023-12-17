@@ -3,7 +3,7 @@ CREATE DATABASE pixelrushdb;-- Creamos base de datos
 
 USE pixelrushdb;-- seleccionamos nuestra nueva BBDD
 
-CREATE TABLE User(
+CREATE TABLE Users(
 	username VARCHAR(30) PRIMARY KEY NOT NULL,
 	password VARCHAR(40) NOT NULL,
 	mail VARCHAR(50) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE Matches(
 	currentLVL INT NOT NULL,
 	maxLVL INT NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY (username) REFERENCES User(username)
+	FOREIGN KEY (username) REFERENCES Users(username)
 )ENGINE = InnoDB;
 
 CREATE TABLE OwnedObjects(
@@ -38,14 +38,14 @@ CREATE TABLE OwnedObjects(
 	username VARCHAR(30) NOT NULL,
 	objectID VARCHAR(20) NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY (username) REFERENCES User(username),
+	FOREIGN KEY (username) REFERENCES Users(username),
 	FOREIGN KEY (objectID) REFERENCES StoreObject(objectID)
 )ENGINE = InnoDB;
 
-INSERT INTO User VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez',null,null,'17/11/1998',90);
-INSERT INTO User VALUES('titi','456','titi@gmail.com','Carles','Sanchez',null,null,'17/11/1998',9000);
+INSERT INTO Users VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez','no photo','n state','17/11/1998',90);
+INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no photo','n state','17/11/1998',9000);
 
 INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
 
-INSERT INTO StoreObject VALUES ('telephone','telephone','100',null,null);
+INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','no photo');

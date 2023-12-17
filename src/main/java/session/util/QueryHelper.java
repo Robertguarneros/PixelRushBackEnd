@@ -24,11 +24,19 @@ public class QueryHelper {
         stringBuffer.append(")");
         return stringBuffer.toString();
     }
-    public static String createQuerySELECT(Object entity, String primaryKey){
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append("SELECT * FROM ").append(entity.getClass().getSimpleName().toLowerCase());
-        stringBuffer.append(" WHERE ").append(primaryKey).append(" =?");
-        return stringBuffer.toString();
+    public static String createQuerySELECT(Class theClass, String pk) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName().toLowerCase());
+        sb.append(" WHERE "+pk+"= ?");
+
+        return sb.toString();
     }
+
+    public static String createQuerySELECTAll(Class theClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName().toLowerCase());
+        return sb.toString();
+    }
+
 
 }

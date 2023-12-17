@@ -1,5 +1,4 @@
 package session;
-import edu.upc.dsa.models.User;
 import session.util.ObjectHelper;
 import session.util.QueryHelper;
 
@@ -36,7 +35,7 @@ public class SessionImpl implements Session{
         }
     }
 
-    public Object get(Object entity, String primaryKey, Object value){
+    /*public Object get(Object entity, String primaryKey, Object value){
         String selectQuery = QueryHelper.createQuerySELECT(entity, primaryKey);
         ResultSet resultSet=null;
         PreparedStatement preparedStatement = null;
@@ -46,14 +45,14 @@ public class SessionImpl implements Session{
             preparedStatement.setObject(1,value);
             resultSet = preparedStatement.executeQuery();
 
-            ResultSetMetaData setMetaData = resultSet.getMetaData();
-            int nColunsm = setMetaData.getColumnCount();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int numberOfColumns = resultSetMetaData.getColumnCount();
             Object o = entity.getClass().newInstance();
             Object valueColumn = null;
 
             while(resultSet.next()){
-                for (int i = 1; i <= nColunsm; i++) {
-                    String nameColumn = setMetaData.getColumnName(i);
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    String nameColumn = resultSetMetaData.getColumnName(i);
                     ObjectHelper.setter(o, nameColumn, resultSet.getObject(i));
                     System.out.println((nameColumn));
                     System.out.println((resultSet.getObject(i)));
@@ -84,5 +83,45 @@ public class SessionImpl implements Session{
             }
             return  null;
         }
+    }*/
+    public Object get(Class theClass, String pk, Object value) {
+        String selectQuery  = QueryHelper.createQuerySELECT(theClass, pk);
+        ResultSet rs;
+        PreparedStatement pstm = null;
+
+        try {
+            pstm = conn.prepareStatement(selectQuery);
+            pstm.setObject(1, value); //son los ?
+            rs = pstm.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            //
+            int numberOfColumns = rsmd.getColumnCount();
+            //
+            Object o = theClass.newInstance();
+            //
+            Object valueColumn = null;
+            while (rs.next()){
+                for (int i=1; i<=numberOfColumns; i++){
+                    String columnName = rsmd.getColumnName(i);
+                    ObjectHelper.setter(o, columnName, rs.getObject(i));
+                    System.out.println(columnName);
+                    System.out.println(rs.getObject(i));
+                    valueColumn = rs.getObject(i);
+                    //if (valueColumn!=null) ObjectHelper.setter(o, columnName, rs.getObject(i));
+                }
+            }
+            return o;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
+
 }
