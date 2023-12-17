@@ -2,6 +2,7 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.manager.Manager;
 import edu.upc.dsa.manager.ManagerImpl;
+import edu.upc.dsa.models.OwnedObjects;
 import edu.upc.dsa.models.bodies.LoginCredentials;
 import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
@@ -44,7 +45,154 @@ public class Service {
             //m.addObjectToStore("222","skin",50,"skin cosmetica");
         //}
     }
+    //These have been corrected to use with DB:
 
+    //add object to store
+    @POST
+    @ApiOperation(value = "Add new object to store", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New object added successfully"),
+            @ApiResponse(code = 404, message = "objectID already exists")
+    })
+    @Path("/addObjectToStore")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response addObjectToStore(StoreObject object){
+        this.m.addObjectToStore(object.getObjectID(),object.getArticleName(),object.getPrice(),object.getDescription());
+        return Response.status(201).build();
+    }
+    //register User
+    @POST
+    @ApiOperation(value = "Register a new user", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User registered successfully")
+    })
+    @Path("/registerNewUser")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response registerNewUser(RegisterCredentials user){
+        try {
+            this.m.register(user.getUsername(), user.getPassword(),user.getMail(), user.getName(), user.getSurname(), user.getBirthDate());
+            return Response.status(201).build();
+        }catch (UsernameDoesExist e){
+            return  Response.status(404).build();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // Create a new Match
+    @PUT
+    @ApiOperation(value = "Create a new Match", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Match created successfully"),
+            @ApiResponse(code = 404, message = "Username does not exist or user is already in Match")
+    })
+    @Path("/createMatch/{username}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createMatch(@PathParam("username")String username){
+        try {
+            this.m.createMatch(username);
+        } catch(UsernameDoesNotExistException | UsernameIsInMatchException e){
+            return Response.status(404).build();
+        }
+        return Response.status(201).build();
+    }
+    //get user
+    @GET
+    @ApiOperation(value = "get a user", notes = "given a username")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Users.class),
+            @ApiResponse(code = 404, message = "Username does not exist")
+    })
+    @Path("/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@PathParam("username") String username) {
+        Users u = null;
+        try {
+            u = this.m.getUser(username);
+        } catch (UsernameDoesNotExistException e) {
+            return Response.status(404).build();
+        }
+        return Response.status(200).entity(u).build();
+    }
+    //login
+    @POST
+    @ApiOperation(value = "Login", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "User login successful")
+    })
+    @Path("/login")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response login(LoginCredentials loginCredentials){
+        try {
+            this.m.login(loginCredentials.getUsername(), loginCredentials.getPassword());
+            return Response.status(201).build();
+        } catch (UsernameDoesNotExistException e) {
+            throw new RuntimeException(e);
+        } catch (IncorrectPassword e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //Get object
+    @GET
+    @ApiOperation(value = "get Object information", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = StoreObject.class),
+            @ApiResponse(code = 404, message = "ObjectID does not exist")
+    })
+    @Path("/getObjectInformation/{objectID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getObjectInformation(@PathParam("objectID") String objectID) throws ObjectIDDoesNotExist {
+        try{
+            StoreObject object = this.m.getObject(objectID);
+            return Response.status(200).entity(object).build();
+        } catch(ObjectIDDoesNotExist e) {
+            return Response.status(404).build();}
+    }
+    //Get List of Owned Objects
+    @GET
+    @ApiOperation(value = "get list of owned objects", notes = "returns a list")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = OwnedObjects.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "Username does not exist")
+    })
+    @Path("/getOwnedObjects/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwnedObjects(@PathParam("username") String username) throws UsernameDoesNotExistException {
+        try{
+            List<OwnedObjects> ownedObjects = this.m.getOwnedObjects(username);
+            GenericEntity<List<OwnedObjects>> entity = new GenericEntity<List<OwnedObjects>>(ownedObjects){};
+            return Response.status(200).entity(entity).build();
+        } catch(UsernameDoesNotExistException e) {
+            return Response.status(404).build();}
+    }
+    // Add item to user
+    @PUT
+    @ApiOperation(value = "Add item to user", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Item added successfully"),
+            @ApiResponse(code = 404, message = "Username does not exist or objectID does not exist"),
+            @ApiResponse(code = 550, message = "Already Owned"),
+            @ApiResponse(code = 551, message = "Not enough Points")
+    })
+    @Path("/addItemToUser/{username}/{objectID}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response addItemToUser(@PathParam("username")String username,@PathParam("objectID")String objectID){
+        try {
+            this.m.addItemToUser(username,objectID);
+        } catch(UsernameDoesNotExistException | ObjectIDDoesNotExist e){
+            return Response.status(404).build();
+        }catch (AlreadyOwned e){
+            return Response.status(550).build();
+        }catch (NotEnoughPoints e){
+            return Response.status(551).build();
+        }
+        return Response.status(201).build();
+    }
+
+
+
+
+
+    //These are missing to use DDBB
     //get store size
     @GET
     @ApiOperation(value = "Get current store size", notes = "")
@@ -72,24 +220,7 @@ public class Service {
         return Response.status(200).entity(jsonResponse.toString()).build();
     }
 
-//get user
-    @GET
-    @ApiOperation(value = "get a user", notes = "given a username")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK", response = Users.class),
-        @ApiResponse(code = 404, message = "Username does not exist")
-    })
-    @Path("/{username}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("username") String username) {
-        Users u = null;
-        try {
-            u = this.m.getUser(username);
-        } catch (UsernameDoesNotExistException e) {
-            return Response.status(404).build();
-        }
-        return Response.status(200).entity(u).build();
-    }
+
     //get all users
     @GET
     @ApiOperation(value = "get all users", notes = "return list")
@@ -131,22 +262,7 @@ public class Service {
         if(!playedMatches.isEmpty()||this.m.getUser(username)!=null) return Response.status(200).entity(entity).build();
         else return Response.status(404).build();
     }*/
-    //Get object
-    @GET
-    @ApiOperation(value = "get Object information", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = StoreObject.class),
-            @ApiResponse(code = 404, message = "ObjectID does not exist")
-    })
-    @Path("/getObjectInformation/{objectID}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getObjectInformation(@PathParam("objectID") String objectID) throws ObjectIDDoesNotExist {
-        try{
-            StoreObject object = this.m.getObject(objectID);
-            return Response.status(200).entity(object).build();
-        } catch(ObjectIDDoesNotExist e) {
-            return Response.status(404).build();}
-    }
+
     //Get match
     @GET
     @ApiOperation(value = "get active match", notes = "")
@@ -161,82 +277,7 @@ public class Service {
         if(m!=null) return Response.status(200).entity(m).build();
         else return Response.status(404).build();
     }
-    //register User
-    @POST
-    @ApiOperation(value = "Register a new user", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "User registered successfully")
-    })
-    @Path("/registerNewUser")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response registerNewUser(RegisterCredentials user){
-        try {
-            this.m.register(user.getUsername(), user.getPassword(),user.getMail(), user.getName(), user.getSurname(), user.getBirthDate());
-            return Response.status(201).build();
-        }catch (UsernameDoesExist e){
-            return  Response.status(404).build();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    //login
-    @POST
-    @ApiOperation(value = "Login", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "User login successful")
-    })
-    @Path("/login")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response login(LoginCredentials loginCredentials){
-        try {
-            this.m.login(loginCredentials.getUsername(), loginCredentials.getPassword());
-            return Response.status(201).build();
-        } catch (UsernameDoesNotExistException e) {
-            throw new RuntimeException(e);
-        } catch (IncorrectPassword e) {
-            throw new RuntimeException(e);
-        }
-    }
-    // Add item to user
-    @PUT
-    @ApiOperation(value = "Add item to user", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Item added successfully"),
-            @ApiResponse(code = 404, message = "Username does not exist or objectID does not exist"),
-            @ApiResponse(code = 550, message = "Already Owned"),
-            @ApiResponse(code = 551, message = "Not enough Points")
-    })
-    @Path("/addItemToUser/{username}/{objectID}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response addItemToUser(@PathParam("username")String username,@PathParam("objectID")String objectID){
-        try {
-            this.m.addItemToUser(username,objectID);
-        } catch(UsernameDoesNotExistException | ObjectIDDoesNotExist e){
-            return Response.status(404).build();
-        }catch (AlreadyOwned e){
-            return Response.status(550).build();
-        }catch (NotEnoughPoints e){
-            return Response.status(551).build();
-        }
-        return Response.status(201).build();
-    }
-    // Create a new Match
-    @PUT
-    @ApiOperation(value = "Create a new Match", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Match created successfully"),
-            @ApiResponse(code = 404, message = "Username does not exist or user is already in Match")
-    })
-    @Path("/createMatch/{username}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response createMatch(@PathParam("username")String username){
-        try {
-            this.m.createMatch(username);
-        } catch(UsernameDoesNotExistException | UsernameIsInMatchException e){
-            return Response.status(404).build();
-        }
-        return Response.status(201).build();
-    }
+
     // Get Level from active Match
     @GET
     @ApiOperation(value = "Get level from active match", notes = "")
@@ -307,17 +348,5 @@ public class Service {
         }
         return Response.status(201).build();
     }*/
-    //add object to store
-    @POST
-    @ApiOperation(value = "Add new object to store", notes = "")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New object added successfully"),
-            @ApiResponse(code = 404, message = "objectID already exists")
-    })
-    @Path("/addObjectToStore")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public Response addObjectToStore(StoreObject object){
-        this.m.addObjectToStore(object.getObjectID(),object.getArticleName(),object.getPrice(),object.getDescription());
-        return Response.status(201).build();
-    }
+
 }
