@@ -78,36 +78,7 @@ public class ManagerImpl implements Manager{
         return activeMatches.get(username);
     }
 
-    @Override
-    public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
-        boolean loggedIn = false;
-        Session session = null;
-        Users users = this.users.get(username);
-        logger.info("username: "+ users.getUsername());
-        logger.info("Password: "+ users.getPassword());
-        try{
-            session = FactorySession.openSession();
-            Users users2 = (Users) session.get(Users.class,"username", username);
-            if ((users2 != null) && users.getPassword().equals(password)){
-                logger.info("Welcome User:"+username);
-                loggedIn = true;
-            }else if(!users.getPassword().equals(password)){
-                loggedIn = false;
-                logger.warn("Username or Password was incorrect");
-                throw new IncorrectPassword("Username or Password was incorrect");
-            }else if(users == null){
-                loggedIn = false;
-                logger.warn("Username or Password was incorrect");
-                throw new UsernameDoesNotExistException("Username or Password was incorrect");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-            return loggedIn;
-        }finally {
-            session.close();
-        }
-        return loggedIn;
-    }
+
 
     /*@Override
     public void addItemToUser(String username, StoreObject objectID)throws UsernameDoesNotExistException, ObjectIDDoesNotExist,NotEnoughPoints, AlreadyOwned {
@@ -203,7 +174,9 @@ public class ManagerImpl implements Manager{
             logger.info("User has ended match");
         }
     }*/
-// These functions have been implemented with Databases
+
+
+// These functions have been implemented with Databases and are working correctly
     @Override
     public void addObjectToStore(String objectID, String articleName, int price, String description){
         Session session = null;
@@ -245,7 +218,9 @@ public class ManagerImpl implements Manager{
     public void createMatch(String username)throws UsernameDoesNotExistException, UsernameIsInMatchException {
         Session session = null;
         logger.info("Create match for user "+username);
-        if (!this.users.containsKey(username)){
+        Users userExists = null;
+        userExists = getUser(username);
+        if (userExists==null){
             logger.warn("User does not exist");
             throw new UsernameDoesNotExistException("User does not exist");
         }else if (activeMatches.get(username)!=null){
@@ -274,5 +249,26 @@ public class ManagerImpl implements Manager{
             throw new UsernameDoesNotExistException("User does not exist");
         }
         return foundUser;
+    }
+    @Override
+    public boolean login(String username, String password) throws UsernameDoesNotExistException, IncorrectPassword {
+        boolean loggedIn = false;
+        Users userInDB = null;
+        userInDB =getUser(username);
+
+        logger.info("username: "+ userInDB.getUsername());
+        logger.info("Password: "+ userInDB.getPassword());
+
+        if ((userInDB != null) && userInDB.getPassword().equals(password)){
+            logger.info("Welcome User:"+username);
+            loggedIn = true;
+        }else if(!userInDB.getPassword().equals(password)){
+            logger.warn("Username or Password was incorrect");
+            throw new IncorrectPassword("Username or Password was incorrect");
+        }else if(userInDB == null){
+            logger.warn("Username or Password was incorrect");
+            throw new UsernameDoesNotExistException("Username or Password was incorrect");
+        }
+        return loggedIn;
     }
 }
