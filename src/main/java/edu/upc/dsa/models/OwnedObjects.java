@@ -1,6 +1,7 @@
 package edu.upc.dsa.models;
 
 public class OwnedObjects {
+    int id;//No se usa, solo es para que no de error al usar el setter.
     String username;
     String objectID;
 
@@ -24,5 +25,13 @@ public class OwnedObjects {
 
     public void setObjectID(String objectID) {
         this.objectID = objectID;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
