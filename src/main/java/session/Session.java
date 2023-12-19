@@ -15,6 +15,5 @@ public interface Session<E> {
     List<Object> getList(Class theClass, String key, Object value);
     List<Object> getListAll(Class theClass);
     Object getMatch(Class theClass, Object value);
-    void update(Class theClass, String pk, String set, Object pkValue, Object setValue) throws SQLException;
-
+    void update(Class theClass, String pk, String parameterToUpdate, Object valueOfPrimaryKey, Object valueOfParameterToUpdate) throws SQLException;
 }

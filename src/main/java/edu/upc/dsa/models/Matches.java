@@ -57,13 +57,18 @@ Matches {
         this.maxLVL = maxLVL;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     //methods
     public void nextLevel(int points){//method to change to the next level
         this.currentLVL = this.currentLVL+1;
         this.totalPoints = this.totalPoints+points;
     }
-
     public void endMatchLastLevel(int points){//method to end the match if the user is at the last level
         this.totalPoints = this.totalPoints+points;
     }

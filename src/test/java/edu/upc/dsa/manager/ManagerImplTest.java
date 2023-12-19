@@ -15,14 +15,13 @@ public class ManagerImplTest {
     Manager m;
 
     @BeforeEach
-    public void setUp() throws UsernameDoesExist, SQLException {
+    public void setUp() throws UsernameDoesExist, SQLException, UsernameDoesNotExistException {
         this.m = new ManagerImpl();
         m.register("robertoguarneros11","123","roberto@gmail.com","Guarneros","Roberto","02/11/2002");
         m.register("titi", "456","titi@gmail.com","Carles","Sanchez","02/11/2002");
         m.register("Luxu","789","lucia@gmail.com","Lucia","Ocaña","02/11/2002");
         m.register("Xuculup","000","Ángel","angel@gmail.com","Redondo","02/11/2002");
-        //m.addObjectToStore("123","Poción", 100, "Poción de salto");
-        //m.addObjectToStore("222","skin",50,"skin cosmetica");
+
     }
     @AfterEach
     public void tearDown() {
@@ -105,13 +104,13 @@ public class ManagerImplTest {
     @Test
     public void testCreateMatch() throws UsernameDoesNotExistException, UsernameIsInMatchException{//test to create a new match, we need to implement a getMatch in the ManagerImpl in order to be able to first see if the user has a current match or not.
         //Verify user is not in match
-        Assert.assertNull(this.m.getMatch("robertoguarneros11"));
+        Assert.assertNull(this.m.getLastMatch("robertoguarneros11"));
 
         //Create a match
         this.m.createMatch("robertoguarneros11");
-        Assert.assertNotNull(this.m.getMatch("robertoguarneros11"));
-        Assert.assertEquals(0, this.m.getMatch("robertoguarneros11").getTotalPoints());
-        Assert.assertEquals(3, this.m.getMatch("robertoguarneros11").getMaxLVL());
+        Assert.assertNotNull(this.m.getLastMatch("robertoguarneros11"));
+        Assert.assertEquals(0, this.m.getLastMatch("robertoguarneros11").getTotalPoints());
+        Assert.assertEquals(3, this.m.getLastMatch("robertoguarneros11").getMaxLVL());
 
         //Testing exceptions
         Assert.assertThrows(UsernameDoesNotExistException.class,()->this.m.createMatch("usernoexiste"));
@@ -133,10 +132,10 @@ public class ManagerImplTest {
         //Create a match to try it.
         this.m.createMatch("robertoguarneros11");
         //Get MatchTotalPoints
-        Assert.assertEquals(0,this.m.getMatch("robertoguarneros11").getTotalPoints());
+        Assert.assertEquals(0,this.m.getLastMatch("robertoguarneros11").getTotalPoints());
         //Increase total points to try getting them
-        this.m.getMatch("robertoguarneros11").setTotalPoints(100);
-        Assert.assertEquals(100,this.m.getMatch("robertoguarneros11").getTotalPoints());
+        this.m.getLastMatch("robertoguarneros11").setTotalPoints(100);
+        Assert.assertEquals(100,this.m.getLastMatch("robertoguarneros11").getTotalPoints());
 
         //Testing exceptions
         Assert.assertThrows(UsernameDoesNotExistException.class,()->this.m.getMatchTotalPoints("usernoexiste"));

@@ -45,10 +45,10 @@ public class QueryHelper {
         return sb.toString();
     }
 
-    public static String createQueryUPDATE(Class theClass, String pk, String update){
+    public static String createQueryUPDATE(Class theClass, String pk, String parameterToUpdate){
         StringBuffer sb = new StringBuffer();
         sb.append("UPDATE ").append(theClass.getSimpleName().toLowerCase());
-        sb.append(" SET " + update + " = ?");
+        sb.append(" SET " + parameterToUpdate + " = ?");
         sb.append(" WHERE " + pk + " = ?");
         return sb.toString();
     }

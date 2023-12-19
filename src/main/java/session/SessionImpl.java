@@ -193,13 +193,12 @@ public class SessionImpl implements Session{
         return null;
     }
 
-    public void update(Class theClass, String pk, String set, Object pkValue, Object setValue) throws SQLException {
-        String updateQuery = QueryHelper.createQueryUPDATE(theClass,pk,set);
+    public void update(Class theClass, String pk, String parameterToUpdate, Object valueOfPrimaryKey, Object valueOfParameterToUpdate) throws SQLException {
+        String updateQuery = QueryHelper.createQueryUPDATE(theClass,pk,parameterToUpdate);
         PreparedStatement statement = conn.prepareStatement(updateQuery);
-        statement.setObject(1,setValue);
-        statement.setObject(2,pkValue);
+        statement.setObject(1,valueOfParameterToUpdate);
+        statement.setObject(2,valueOfPrimaryKey);
         int rowsAffected = statement.executeUpdate();
         statement.close();
     }
-
 }

@@ -42,8 +42,8 @@ CREATE TABLE OwnedObjects(
 	FOREIGN KEY (objectID) REFERENCES StoreObject(objectID)
 )ENGINE = InnoDB;
 
-INSERT INTO Users VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez','no photo','n state','17/11/1998',90);
-INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no photo','n state','17/11/1998',9000);
+INSERT INTO Users VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez','no photo','no state','17/11/1998',90);
+INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no photo','no state','17/11/1998',9000);
 
 INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
