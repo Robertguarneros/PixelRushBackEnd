@@ -38,5 +38,20 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTMatch(Class theClass){
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(theClass.getSimpleName().toLowerCase());
+        sb.append(" WHERE username = ? ORDER BY id DESC LIMIT 1");
+        return sb.toString();
+    }
+
+    public static String createQueryUPDATE(Class theClass, String pk, String update){
+        StringBuffer sb = new StringBuffer();
+        sb.append("UPDATE ").append(theClass.getSimpleName().toLowerCase());
+        sb.append(" SET " + update + " = ?");
+        sb.append(" WHERE " + pk + " = ?");
+        return sb.toString();
+    }
+
 
 }

@@ -218,12 +218,20 @@ public class ManagerImpl implements Manager{
 
     @Override
     public List<Users> getAllUsers() {
-        return new ArrayList<>(users.values());
+        Session session = null;
+        session = FactorySession.openSession();
+        List<Users> usersList = (List<Users>) session.getListAll(Users.class);
+        session.close();
+        return usersList;
     }
 
     @Override
     public List<StoreObject> getObjectListFromStore() {
-        return new ArrayList<>(storeObjects.values());
+        Session session = null;
+        session = FactorySession.openSession();
+        List<StoreObject> storeObjectList = (List<StoreObject>) session.getListAll(StoreObject.class);
+        session.close();
+        return storeObjectList;
     }
 
    /* @Override
@@ -237,7 +245,11 @@ public class ManagerImpl implements Manager{
     @Override
     public Matches getMatch(String username){
         logger.info("get match for ("+username+")");
-        return activeMatches.get(username);
+        Session session = null;
+        session = FactorySession.openSession();
+        Matches matches = (Matches) session.getMatch(Matches.class, username);
+        session.close();
+        return  matches;
     }
 
     @Override
@@ -272,9 +284,8 @@ public class ManagerImpl implements Manager{
         }
     }
 
-    /*@Override
+    @Override
     public void nextLevel(String username, int points) throws UsernameDoesNotExistException, UsernameisNotInMatchException {
-
         Matches activeMatchExists = activeMatches.get(username);
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
@@ -292,13 +303,13 @@ public class ManagerImpl implements Manager{
             logger.info("Trying to end match");
             activeMatchExists.endMatchLastLevel(points);
             logger.info("EndMatch Run");
-            users.get(username).addNewFinishedMatch(activeMatchExists);
+            //users.get(username).addNewFinishedMatch(activeMatchExists);
             activeMatches.remove(username);
             logger.info("User has finished match, all levels passed");
         }
-    }*/
+    }
 
-   /* @Override
+   @Override
     public void endMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException{
         if (!this.users.containsKey(username)){
             logger.warn("User does not exist");
@@ -308,11 +319,11 @@ public class ManagerImpl implements Manager{
             throw new UsernameisNotInMatchException("User is not in match");
         } else {
             Matches m = activeMatches.get(username);
-            users.get(username).addNewFinishedMatch(m);
+            //users.get(username).addNewFinishedMatch(m);
             activeMatches.remove(username);
             logger.info("User has ended match");
         }
-    }*/
+    }
 
 
 }

@@ -22,8 +22,8 @@ public interface Manager {
     public void createMatch(String username) throws UsernameDoesNotExistException, UsernameIsInMatchException;
     public int getLevelFromMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException;
     public int getMatchTotalPoints(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException;
-   // public void nextLevel(String username, int points)throws UsernameDoesNotExistException, UsernameisNotInMatchException;
-    //public void endMatch(String username)throws UsernameDoesNotExistException, UsernameisNotInMatchException;
+   public void nextLevel(String username, int points)throws UsernameDoesNotExistException, UsernameisNotInMatchException;
+    public void endMatch(String username)throws UsernameDoesNotExistException, UsernameisNotInMatchException;
     public int storeSize();
     public void addObjectToStore(String objectID, String articleName, int price, String description);//create a new item available on the store
     public StoreObject getObject(String objectID)throws ObjectIDDoesNotExist;

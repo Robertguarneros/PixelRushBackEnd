@@ -1,7 +1,10 @@
 package edu.upc.dsa.models;
 
+import java.util.Random;
+
 public class
 Matches {
+    int id;
     String username;
     int totalPoints;
     int currentLVL;
