@@ -14,7 +14,7 @@ public class FactorySession {
     private static Connection getConnection() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/pixelrushdb?" + "user=root&password=1234");
+            conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/pixelrushdb?" + "user=root&password=Mazinger72");
 
         } catch (SQLException ex) {
             // handle any errors
