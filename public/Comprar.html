@@ -25,7 +25,7 @@
             var resultadosTabla = $('#resultados');
 
             $.ajax({
-                url: 'http://localhost:8080/dsaApp/pixelRush/getObjectListFromStore',
+                url: 'http://147.83.7.203:80/dsaApp/pixelRush/getObjectListFromStore',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -57,7 +57,7 @@
                 // Realizar la solicitud PUT
                 $.ajax({
                     type: 'PUT',
-                    url: 'http://localhost:8080/dsaApp/pixelRush/addItemToUser/' + username + '/' + id,
+                    url: 'http://147.83.7.203:80/dsaApp/pixelRush/addItemToUser/' + username + '/' + id,
                     contentType: 'application/json',
                     success: function(data, status) {
                         if (status === 'success') {
@@ -117,7 +117,7 @@
             // Hacer la solicitud POST a la API
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/dsaApp/pixelRush/addObjectToStore',
+                url: 'http://147.83.7.203:80/dsaApp/pixelRush/addObjectToStore',
                 contentType: 'application/json',
                 data: JSON.stringify(storeObject),
                 success: function (data, status) {

@@ -21,8 +21,8 @@ public class Main {
 
     //La primera opcion es para trabajar en maquina local, la segunda es para que funcione con el servidor UPC.
 
-    public static final String BASE_URI = "http://localhost:8080/dsaApp/";
-    //public static final String BASE_URI = "http://147.83.7.203:80/dsaApp/";
+    //public static final String BASE_URI = "http://localhost:8080/dsaApp/";
+    public static final String BASE_URI = "http://147.83.7.203:80/dsaApp/";
 
 
     /**
@@ -39,8 +39,8 @@ public class Main {
 
         BeanConfig beanConfig = new BeanConfig();
 
-        beanConfig.setHost("localhost:8080");
-        //beanConfig.setHost("147.83.7.203:80");
+        //beanConfig.setHost("localhost:8080");
+        beanConfig.setHost("147.83.7.203:80");
         beanConfig.setBasePath("/dsaApp");
         beanConfig.setContact("support@example.com");
         beanConfig.setDescription("REST API for Tracks Manager");
