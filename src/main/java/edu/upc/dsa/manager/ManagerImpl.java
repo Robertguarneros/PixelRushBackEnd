@@ -1,10 +1,7 @@
 package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.OwnedObjects;
-import edu.upc.dsa.models.Users;
-import edu.upc.dsa.models.Matches;
-import edu.upc.dsa.models.StoreObject;
+import edu.upc.dsa.models.*;
 import org.apache.log4j.Logger;
 import session.Session;
 
@@ -354,4 +351,11 @@ public int numberOfUsers() {
         session.close();
         return  matches;
     }
+    public void askQuestion(Question question){
+        System.out.println("Date: "+question.getDate()+"\n");
+        System.out.println("Title: "+question.getTitle()+"\n");
+        System.out.println("Message: "+question.getMessage()+"\n");
+        System.out.println("Sender: "+question.getSender()+"\n");
+    }
+
 }

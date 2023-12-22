@@ -7,6 +7,7 @@ import edu.upc.dsa.models.bodies.LoginCredentials;
 import edu.upc.dsa.models.Matches;
 import edu.upc.dsa.models.StoreObject;
 import edu.upc.dsa.models.Users;
+import edu.upc.dsa.models.Question;
 import edu.upc.dsa.models.bodies.RegisterCredentials;
 import io.swagger.annotations.*;
 
@@ -326,5 +327,23 @@ public class Service {
         Matches m = this.m.getLastMatch(username);
         if(m!=null) return Response.status(200).entity(m).build();
         else return Response.status(404).build();
+    }
+
+
+    //Minimo 2
+    @POST
+    @ApiOperation(value = "Ask a question", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Question sent successfully")
+    })
+    @Path("/question")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response askAQuestion(Question question){
+        try {
+            this.m.askQuestion(question);
+            return Response.status(201).build();
+        }catch (Exception e){
+            return  Response.status(404).build();
+        }
     }
 }

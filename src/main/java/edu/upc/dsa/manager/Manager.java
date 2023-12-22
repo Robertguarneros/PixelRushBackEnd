@@ -1,10 +1,7 @@
 package edu.upc.dsa.manager;
 
 import edu.upc.dsa.exceptions.*;
-import edu.upc.dsa.models.OwnedObjects;
-import edu.upc.dsa.models.Users;
-import edu.upc.dsa.models.StoreObject;
-import edu.upc.dsa.models.Matches;
+import edu.upc.dsa.models.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,4 +25,7 @@ public interface Manager {
     public void endMatch(String username) throws UsernameDoesNotExistException, UsernameisNotInMatchException, SQLException;
     public List<Matches> getPlayedMatches(String username)throws UsernameDoesNotExistException;
     public Matches getLastMatch(String username);
+
+    //Minimo  2
+    public void askQuestion(Question question);
 }
