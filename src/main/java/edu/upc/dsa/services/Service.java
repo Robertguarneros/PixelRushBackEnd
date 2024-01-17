@@ -25,12 +25,13 @@ public class Service {
 
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist, SQLException {
         this.m = ManagerImpl.getInstance();
-
-        m.addMessage("Welcome to the list of messages");
-        m.addMessage("New Skins are available");
-        m.addBadge("titi","master del universo","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
-        m.addBadge("titi","rey","https://scontent.fbcn10-1.fna.fbcdn.net/v/t1.6435-9/131442585_206260554431600_5424530997005657064_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=dd63ad&_nc_ohc=vPvq4bX1avYAX_9lPCa&_nc_ht=scontent.fbcn10-1.fna&oh=00_AfCO44gzFAVhO-GCtJg4ZW3atuh-ryFru5swX7Mg7eLI4A&oe=65CF1237");
-        m.addBadge("roberto", "becario enfurismado","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
+        if(m.getMessages()==null){
+            m.addMessage("Welcome to the list of messages");
+            m.addMessage("New Skins are available");
+            m.addBadge("titi","master del universo","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
+            m.addBadge("titi","rey","https://scontent.fbcn10-1.fna.fbcdn.net/v/t1.6435-9/131442585_206260554431600_5424530997005657064_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=dd63ad&_nc_ohc=vPvq4bX1avYAX_9lPCa&_nc_ht=scontent.fbcn10-1.fna&oh=00_AfCO44gzFAVhO-GCtJg4ZW3atuh-ryFru5swX7Mg7eLI4A&oe=65CF1237");
+            m.addBadge("roberto", "becario enfurismado","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
+        }
     }
     //These have been corrected to use with DB:
     //Get number of users
