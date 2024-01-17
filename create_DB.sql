@@ -43,7 +43,7 @@ CREATE TABLE OwnedObjects(
 )ENGINE = InnoDB;
 
 INSERT INTO Users VALUES('Roger01','123','Roger@gmail.com','Roger','Jimenez','https://assets.stickpng.com/images/584df3ad6a5ae41a83ddee08.png','no state','17/11/1998',200);
-INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no photo','https://media.formula1.com/image/upload/content/dam/fom-website/manual/2023/rb19.png.transform/9col/image.png','17/11/1998',9000);
+INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','https://media.formula1.com/image/upload/content/dam/fom-website/manual/2023/rb19.png.transform/9col/image.png','no state','17/11/1998',9000);
 
 INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
