@@ -42,12 +42,13 @@ CREATE TABLE OwnedObjects(
 	FOREIGN KEY (objectID) REFERENCES StoreObject(objectID)
 )ENGINE = InnoDB;
 
-INSERT INTO Users VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez','no photo','no state','17/11/1998',90);
+INSERT INTO Users VALUES('Roger01','password','Roger@gmail.com','Roger','Jimenez','no photo','no state','17/11/1998',200);
 INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no photo','no state','17/11/1998',9000);
 
 INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
 
-INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','no photo');
+INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','https://png.pngtree.com/png-clipart/20191027/ourmid/pngtree-telephone-glyph-icon-vector-png-image_5199512.png');
+INSERT INTO StoreObject VALUES ('radio','radio','100','a radio to listen to music','https://static.vecteezy.com/system/resources/previews/001/207/935/original/radio-png.png');
 
 INSERT INTO OwnedObjects (username, objectID) VALUES ('titi','telephone');
