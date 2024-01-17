@@ -25,6 +25,8 @@ public class Service {
 
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist, SQLException {
         this.m = ManagerImpl.getInstance();
+        m.addMessage("Welcome to the list of messages");
+        m.addMessage("New Skins are available");
     }
     //These have been corrected to use with DB:
     //Get number of users
