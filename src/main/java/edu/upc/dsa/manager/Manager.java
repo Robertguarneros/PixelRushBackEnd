@@ -29,4 +29,6 @@ public interface Manager {
     //Minimo  2
     public void askQuestion(Question question);
     public void sendReport(Report report);
+    public List<Message> getMessages();
+    public void addMessage(String message);
 }

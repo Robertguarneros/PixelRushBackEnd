@@ -358,4 +358,19 @@ public class Service {
             return  Response.status(404).build();
         }
     }
+    @GET
+    @ApiOperation(value = "get messages", notes = "returns list")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Message.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "No messages")
+    })
+    @Path("/posts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMessages() {
+        List<Message> messages = this.m.getMessages();
+        GenericEntity<List<Message>> entity = new GenericEntity<List<Message>>(messages) {};
+        if(!messages.isEmpty()) return Response.status(200).entity(entity).build();
+        else return Response.status(404).build();
+    }
+
 }

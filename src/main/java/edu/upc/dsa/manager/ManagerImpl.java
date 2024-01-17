@@ -15,6 +15,7 @@ import session.FactorySession;
 public class ManagerImpl implements Manager{
     private static Manager instance;
     HashMap<String,Matches> activeMatches; // Key = username
+    private List<Message> messages;
     final static Logger logger = Logger.getLogger(ManagerImpl.class);
 
     public static Manager getInstance(){
@@ -353,17 +354,27 @@ public int numberOfUsers() {
     }
 
     //Minimo 2
+    @Override
     public void askQuestion(Question question){
         System.out.println("Date: "+question.getDate()+"\n");
         System.out.println("Title: "+question.getTitle()+"\n");
         System.out.println("Message: "+question.getMessage()+"\n");
         System.out.println("Sender: "+question.getSender()+"\n");
     }
-
+    @Override
     public void sendReport(Report report){
         System.out.println("Date: "+report.getDate()+"\n");
         System.out.println("Title: "+report.getTitle()+"\n");
         System.out.println("Message: "+report.getMessage()+"\n");
         System.out.println("Sender: "+report.getSender()+"\n");
     }
+    @Override
+    public void addMessage(String message) {
+        Message newMessage = new Message(message);
+        // Agregar el mensaje a la lista de mensajes.
+        this.messages.add(newMessage);
+    }
+    @Override
+    public List<Message> getMessages() { return new ArrayList<>(messages); }
+
 }
