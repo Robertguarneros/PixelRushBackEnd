@@ -25,7 +25,7 @@ public class Service {
 
     public Service() throws UsernameDoesNotExistException, UsernameIsInMatchException, UsernameisNotInMatchException, UsernameDoesExist, SQLException {
         this.m = ManagerImpl.getInstance();
-        if(m.getMessages()==null){
+        if(m.getMessages().size()==0){
             m.addMessage("Welcome to the list of messages");
             m.addMessage("New Skins are available");
             m.addBadge("titi","master del universo","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
