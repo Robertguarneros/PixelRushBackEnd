@@ -26,6 +26,8 @@ public class ManagerImpl implements Manager{
 
     public ManagerImpl(){
         this.activeMatches = new HashMap<>();
+        this.userBadgesHashMap = new HashMap<>();
+        this.messages = new ArrayList<>();
     }
 
 // These functions have been implemented with Databases and are working correctly
