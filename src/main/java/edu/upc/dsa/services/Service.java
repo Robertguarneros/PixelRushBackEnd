@@ -2,12 +2,8 @@ package edu.upc.dsa.services;
 import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.manager.Manager;
 import edu.upc.dsa.manager.ManagerImpl;
-import edu.upc.dsa.models.OwnedObjects;
+import edu.upc.dsa.models.*;
 import edu.upc.dsa.models.bodies.LoginCredentials;
-import edu.upc.dsa.models.Matches;
-import edu.upc.dsa.models.StoreObject;
-import edu.upc.dsa.models.Users;
-import edu.upc.dsa.models.Question;
 import edu.upc.dsa.models.bodies.RegisterCredentials;
 import io.swagger.annotations.*;
 
@@ -341,6 +337,22 @@ public class Service {
     public Response askAQuestion(Question question){
         try {
             this.m.askQuestion(question);
+            return Response.status(201).build();
+        }catch (Exception e){
+            return  Response.status(404).build();
+        }
+    }
+
+    @POST
+    @ApiOperation(value = "Report an issue", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Issue reported")
+    })
+    @Path("/issue")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response sendReport(Report report){
+        try {
+            this.m.sendReport(report);
             return Response.status(201).build();
         }catch (Exception e){
             return  Response.status(404).build();

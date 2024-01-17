@@ -351,6 +351,8 @@ public int numberOfUsers() {
         session.close();
         return  matches;
     }
+
+    //Minimo 2
     public void askQuestion(Question question){
         System.out.println("Date: "+question.getDate()+"\n");
         System.out.println("Title: "+question.getTitle()+"\n");
@@ -358,4 +360,10 @@ public int numberOfUsers() {
         System.out.println("Sender: "+question.getSender()+"\n");
     }
 
+    public void sendReport(Report report){
+        System.out.println("Date: "+report.getDate()+"\n");
+        System.out.println("Title: "+report.getTitle()+"\n");
+        System.out.println("Message: "+report.getMessage()+"\n");
+        System.out.println("Sender: "+report.getSender()+"\n");
+    }
 }
