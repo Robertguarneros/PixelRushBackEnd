@@ -27,6 +27,9 @@ public class Service {
         this.m = ManagerImpl.getInstance();
         m.addMessage("Welcome to the list of messages");
         m.addMessage("New Skins are available");
+        m.addBadge("titi","master del universo","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
+        m.addBadge("titi","rey","https://scontent.fbcn10-1.fna.fbcdn.net/v/t1.6435-9/131442585_206260554431600_5424530997005657064_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=dd63ad&_nc_ohc=vPvq4bX1avYAX_9lPCa&_nc_ht=scontent.fbcn10-1.fna&oh=00_AfCO44gzFAVhO-GCtJg4ZW3atuh-ryFru5swX7Mg7eLI4A&oe=65CF1237");
+        m.addBadge("roberto", "becario enfurismado","https://cdn.pixabay.com/photo/2017/07/11/15/51/kermit-2493979_1280.png");
     }
     //These have been corrected to use with DB:
     //Get number of users
@@ -309,7 +312,7 @@ public class Service {
     public Response getPlayedMatchesFromUser(@PathParam("username") String username) throws UsernameDoesNotExistException {
         List<Matches> playedMatches = this.m.getPlayedMatches(username);
         GenericEntity<List<Matches>> entity = new GenericEntity<List<Matches>>(playedMatches) {};
-        if(!playedMatches.isEmpty()||this.m.getUser(username)!=null) return Response.status(200).entity(entity).build();
+        if(!playedMatches.isEmpty() & this.m.getUser(username)!=null) return Response.status(200).entity(entity).build();
         else return Response.status(404).build();
     }
     //Get match
@@ -374,5 +377,18 @@ public class Service {
         if(!messages.isEmpty()) return Response.status(200).entity(entity).build();
         else return Response.status(404).build();
     }
-
+    @GET
+    @ApiOperation(value = "get user badges", notes = "return list")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Badge.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "Username does not exist")
+    })
+    @Path("/user/{username}/badges")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserBadges(@PathParam("username") String username) throws UsernameDoesNotExistException {
+        List<Badge> badgeList = this.m.getBadges(username);
+        GenericEntity<List<Badge>> entity = new GenericEntity<List<Badge>>(badgeList) {};
+        if(!badgeList.isEmpty() & this.m.getUser(username)!=null) return Response.status(200).entity(entity).build();
+        else return Response.status(404).build();
+    }
 }

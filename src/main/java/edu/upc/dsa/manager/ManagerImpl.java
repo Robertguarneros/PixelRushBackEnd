@@ -15,6 +15,7 @@ import session.FactorySession;
 public class ManagerImpl implements Manager{
     private static Manager instance;
     HashMap<String,Matches> activeMatches; // Key = username
+    HashMap<String,UserBadges> userBadgesHashMap; // Key = username
     private List<Message> messages;
     final static Logger logger = Logger.getLogger(ManagerImpl.class);
 
@@ -376,5 +377,21 @@ public int numberOfUsers() {
     }
     @Override
     public List<Message> getMessages() { return new ArrayList<>(messages); }
-
+    @Override
+    public void addBadge(String user,String name, String avatar){
+        Badge badge = new Badge(name,avatar);
+        UserBadges userBadges = userBadgesHashMap.get(user);
+        if (userBadges == null){
+            UserBadges newuserBadges = new UserBadges(user);
+            newuserBadges.addBadge(badge);
+            userBadgesHashMap.put(user, newuserBadges);
+        }else{
+            userBadges.addBadge(badge);
+        }
+    }
+    @Override
+    public List<Badge> getBadges(String user){
+        UserBadges userBadges = userBadgesHashMap.get(user);
+        return new ArrayList<>(userBadges.getBadges());
+    }
 }

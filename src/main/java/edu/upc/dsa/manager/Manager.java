@@ -4,6 +4,7 @@ import edu.upc.dsa.exceptions.*;
 import edu.upc.dsa.models.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Manager {
@@ -31,4 +32,6 @@ public interface Manager {
     public void sendReport(Report report);
     public List<Message> getMessages();
     public void addMessage(String message);
+    public void addBadge(String user, String name, String avatar);
+    public List<Badge> getBadges(String user);
 }
