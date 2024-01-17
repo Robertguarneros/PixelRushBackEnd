@@ -48,7 +48,7 @@ INSERT INTO Users VALUES('titi','456','titi@gmail.com','Carles','Sanchez','no ph
 INSERT INTO Matches (username, totalPoints, currentLVL, maxLVL) VALUES ('titi','300','2','3');
 
 
-INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','https://png.pngtree.com/png-clipart/20191027/ourmid/pngtree-telephone-glyph-icon-vector-png-image_5199512.png');
+INSERT INTO StoreObject VALUES ('telephone','telephone','100','a telephone to call','https://pngimg.com/d/phone_PNG49004.png');
 INSERT INTO StoreObject VALUES ('radio','radio','100','a radio to listen to music','https://static.vecteezy.com/system/resources/previews/001/207/935/original/radio-png.png');
 
 INSERT INTO OwnedObjects (username, objectID) VALUES ('titi','telephone');
